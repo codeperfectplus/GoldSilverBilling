@@ -1,89 +1,82 @@
 {% extends 'base/base.html' %}
 {% block title %} Gold Price Bill {% endblock %}
 {% block styles %}
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .container {
-        margin-top: 50px;
-    }
-
-    h1 {
-        color: #343a40;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .card {
-        padding: 20px;
-        border: 1px solid #007bff;
-        border-radius: 10px;
-    }
-
-    .card h2 {
-        color: #007bff;
-    }
-
-    .date-time {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 14px;
-        color: #555;
-    }
-
-    .disclaimer {
-        margin-top: 20px;
-        color: #ff0000;
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .save-pdf {
-        margin-top: 20px;
-        text-align: center;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bill.css') }}">
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Gold Price Bill</h1>
-    <div class="card">
-        <h3>Jeweller Details</h3>
-        <p><strong>Name:</strong> Shining Gold Jewellers</p>
-        <p><strong>Address:</strong> 123 Gold Street, Mumbai, Maharashtra, India</p>
-        <p><strong>Contact:</strong> +91 9876543210</p>
-        <hr>
-        <p><strong>Weight:</strong> {{ weight }} grams</p>
-        <p><strong>Price per gram:</strong> ₹{{ price_per_gram }}</p>
-        <hr>
-        <p><strong>Base Price:</strong> ₹{{ bill['Base Price'] | int }}</p>
-        <p><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong> ₹{{ bill['Service Charge'] | int
-            }}</p>
-        <p><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong> ₹{{ bill['Tax'] | int }}</p>
-        <hr>
-        <h2><strong>Total Amount Payable:</strong> ₹{{ bill['Final Price'] }}</h2>
-        <p class="text-center mt-4">Thank you for your purchase!</p>
-        <div class="text-center">
-            <a href="/" class="btn btn-primary mt-3">Calculate Again</a>
+    <!-- Main Content -->
+
+    <div class="main-content">
+        <div class="bill-card">
+            <h2>Bill Details</h2>
+            <div class="details">
+                <span><strong>Name:</strong></span>
+                <span>{{ config["JEWELLER_NAME"] }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Address:</strong></span>
+                <span>{{ config["JEWELLER_ADDRESS"] }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Contact:</strong></span>
+                <span>{{ config["JEWELLER_CONTACT"] }}</span>
+            </div>
+            <hr>
+            <div class="details">
+                <span><strong>Weight:</strong></span>
+                <span>{{ weight }} grams</span>
+            </div>
+            <div class="details">
+                <span><strong>Price per gram:</strong></span>
+                <span>₹{{ price_per_gram }}</span>
+            </div>
+            <hr>
+            <div class="details">
+                <span><strong>Base Price:</strong></span>
+                <span>₹{{ bill['Base Price'] | int }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong></span>
+                <span>₹{{ bill['Service Charge'] | int }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong></span>
+                <span>₹{{ bill['Tax'] | int }}</span>
+            </div>
+            <hr>
+            <div class="details">
+                <h2><strong>Total Amount Payable:</strong></h2>
+                <h2>₹{{ bill['Final Price'] }}</h2>
+            </div>
+            <p class="text-center mt-4">Thank you for your purchase!</p>
+            <div class="text-center">
+                <a href="/" class="btn btn-custom mt-3">Calculate Again</a>
+            </div>
+        </div>
+
+        <!-- Date and Time -->
+        <div class="date-time">
+            <p><strong>Date and Time:</strong> <span id="currentDateTime"></span></p>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> This is not an official bill. It is just an illustration to show the pricing. Partial display of this webpage is not allowed.</p>
+        </div>
+
+        <!-- Save as PDF Option -->
+        <div class="save-pdf">
+            <button onclick="saveAsPDF()" class="btn btn-custom">Save as PDF</button>
         </div>
     </div>
 
-    <!-- Date and Time -->
-    <div class="date-time">
-        <p><strong>Date and Time:</strong> <span id="currentDateTime"></span></p>
-    </div>
-
-    <!-- Disclaimer -->
-    <div class="disclaimer">
-        <p><strong>Disclaimer:</strong> This is not an official bill. It is just an illustration to show the pricing.
-            Partial display of this webpage is not allowed.</p>
-    </div>
-
-    <!-- Save as PDF Option -->
-    <div class="save-pdf">
-        <button onclick="saveAsPDF()" class="btn btn-success">Save as PDF</button>
+    <!-- Sidebar limit it's height -->
+    <div class="sidebar" style="max-height: 300px; overflow-y: auto;">
+        <h2>Jeweler Details</h2>
+        <p><strong>Name:</strong> {{ config["JEWELLER_NAME"] }}</p>
+        <p><strong>Address:</strong> {{ config["JEWELLER_ADDRESS"] }}</p>
+        <p><strong>Contact:</strong> {{ config["JEWELLER_CONTACT"] }}</p>
     </div>
 </div>
 {% endblock %}

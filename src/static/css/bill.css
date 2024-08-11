@@ -1,0 +1,79 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    display: flex;
+    margin-top: 50px;
+}
+
+.main-content {
+    flex: 2;
+    margin-right: 20px;
+}
+
+.sidebar {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+h1 {
+    color: #343a40;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.bill-card {
+    padding: 20px;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.bill-card h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.bill-card .details {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.bill-card .details:last-child {
+    border-bottom: none;
+}
+
+.date-time, .disclaimer, .save-pdf {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.disclaimer {
+    color: #ff0000;
+    font-size: 14px;
+}
+
+.save-pdf {
+    margin-top: 20px;
+}
+
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.sidebar h2 {
+    color: #007bff;
+}

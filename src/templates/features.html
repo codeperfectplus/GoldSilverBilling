@@ -1,38 +1,7 @@
 {% extends 'base/base.html' %}
 {% block title %}Features{% endblock %}
 {% block styles %}
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .container {
-        margin-top: 50px;
-    }
-
-    h1 {
-        color: #343a40;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .feature {
-        margin-bottom: 30px;
-        padding: 20px;
-        background-color: #ffffff;
-        border: 1px solid #007bff;
-        border-radius: 10px;
-    }
-
-    .feature h2 {
-        color: #007bff;
-    }
-
-    .icon {
-        font-size: 50px;
-        color: #007bff;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/features.css') }}">
 {% endblock %}
 {% block content %}
 <div class="container">

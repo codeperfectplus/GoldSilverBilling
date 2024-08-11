@@ -1,38 +1,7 @@
 {% extends 'base/base.html' %}
 {% block title %}About Gold Price Calculator{% endblock %}
 {% block styles %}
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .container {
-        margin-top: 50px;
-    }
-
-    h1 {
-        color: #343a40;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .about-section {
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .about-section h2 {
-        color: #007bff;
-        margin-bottom: 20px;
-    }
-
-    .about-section p {
-        font-size: 18px;
-        line-height: 1.6;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 {% endblock %}
 {% block content %}
 <div class="container">

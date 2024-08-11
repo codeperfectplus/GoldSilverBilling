@@ -1,42 +1,7 @@
 {% extends 'base/base.html' %}
 {% block title %}Pricing Plans{% endblock %}
 {% block styles %}
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .container {
-        margin-top: 50px;
-    }
-
-    h1 {
-        color: #343a40;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .card {
-        margin-bottom: 30px;
-        border: 1px solid #007bff;
-        border-radius: 10px;
-    }
-
-    .card-header {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-custom {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-custom:hover {
-        background-color: #0056b3;
-        color: white;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pricing.css') }}">
 {% endblock %}
 {% block content %}
 <div class="container">
