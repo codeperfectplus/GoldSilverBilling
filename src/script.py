@@ -45,7 +45,7 @@ class GoldPriceItem:
         Returns:
             float: The tax amount.
         """
-        return item_price * self.tax / 100
+        return round(item_price * self.tax / 100, 2)
         
     def calculate_service_charge(self, item_price):
         """
@@ -57,7 +57,7 @@ class GoldPriceItem:
         Returns:
             float: The service charge amount.
         """
-        return item_price * self.service_charge / 100
+        return round(item_price * self.service_charge / 100, 2)
 
     def calculate_price(self):
         """

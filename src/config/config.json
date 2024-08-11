@@ -2,6 +2,9 @@
     "JEWELLER_NAME": "ABC JEWELLER",
     "JEWELLER_ADDRESS": "123 Gold Street, Mumbai, Maharashtra, India",
     "JEWELLER_CONTACT": "+91 9876543210",
+    "JEWELLER_EMAIL" : "email@example.com",
+    "JEWELLER_WEBSITE": "https://www.example.com",
+    "JEWELLER_GSTIN": "27AABCU9876Z1Z1",
     "GOLD_PRICE_PER__GRAM": 5000
 
 }

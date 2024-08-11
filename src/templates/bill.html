@@ -6,101 +6,55 @@
 {% block content %}
 <div class="container">
     <!-- Main Content -->
-
     <div class="main-content">
         <div class="bill-card">
             <h2>Bill Details</h2>
             <div class="details">
-                <span><strong>Name:</strong></span>
-                <span>{{ config["JEWELLER_NAME"] }}</span>
-            </div>
-            <div class="details">
-                <span><strong>Address:</strong></span>
-                <span>{{ config["JEWELLER_ADDRESS"] }}</span>
-            </div>
-            <div class="details">
-                <span><strong>Contact:</strong></span>
-                <span>{{ config["JEWELLER_CONTACT"] }}</span>
-            </div>
-            <hr>
-            <div class="details">
-                <span><strong>Weight:</strong></span>
+                <span><strong>Gold Item Weight:</strong></span>
                 <span>{{ weight }} grams</span>
             </div>
             <div class="details">
                 <span><strong>Price per gram:</strong></span>
                 <span>₹{{ price_per_gram }}</span>
             </div>
-            <hr>
             <div class="details">
                 <span><strong>Base Price:</strong></span>
-                <span>₹{{ bill['Base Price'] | int }}</span>
+                <span>₹{{ bill['Base Price'] | float }}</span>
             </div>
             <div class="details">
                 <span><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong></span>
-                <span>₹{{ bill['Service Charge'] | int }}</span>
+                <span>₹{{ bill['Service Charge'] | float }}</span>
             </div>
             <div class="details">
                 <span><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong></span>
-                <span>₹{{ bill['Tax'] | int }}</span>
+                <span>₹{{ bill['Tax'] | float }}</span>
             </div>
-            <hr>
-            <div class="details">
-                <h2><strong>Total Amount Payable:</strong></h2>
-                <h2>₹{{ bill['Final Price'] }}</h2>
+            <div class="details total">
+                <span><strong>Total Amount Payable:</strong></span>
+                <span>₹{{ bill['Final Price'] | float}}</span>
             </div>
+            <p class="text-center mt-4"> Final amount rounded to nearest integer</p>
             <p class="text-center mt-4">Thank you for your purchase!</p>
             <div class="text-center">
                 <a href="/" class="btn btn-custom mt-3">Calculate Again</a>
             </div>
         </div>
-
-        <!-- Date and Time -->
-        <div class="date-time">
-            <p><strong>Date and Time:</strong> <span id="currentDateTime"></span></p>
-        </div>
-
         <!-- Disclaimer -->
         <div class="disclaimer">
             <p><strong>Disclaimer:</strong> This is not an official bill. It is just an illustration to show the pricing. Partial display of this webpage is not allowed.</p>
         </div>
-
-        <!-- Save as PDF Option -->
-        <div class="save-pdf">
-            <button onclick="saveAsPDF()" class="btn btn-custom">Save as PDF</button>
-        </div>
     </div>
-
-    <!-- Sidebar limit it's height -->
-    <div class="sidebar" style="max-height: 300px; overflow-y: auto;">
+    <!-- Sidebar -->
+    <div class="sidebar">
         <h2>Jeweler Details</h2>
         <p><strong>Name:</strong> {{ config["JEWELLER_NAME"] }}</p>
         <p><strong>Address:</strong> {{ config["JEWELLER_ADDRESS"] }}</p>
         <p><strong>Contact:</strong> {{ config["JEWELLER_CONTACT"] }}</p>
+        <p><strong>Email:</strong> {{ config["JEWELLER_EMAIL"] }}</p>
+        <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
+        <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
+        <p><strong>Gold Rate(Per gm):</strong> ₹ {{ price_per_gram }} </p>
+    
     </div>
 </div>
 {% endblock %}
-<!-- Script to Show Date and Time and Save as PDF -->
-<script>
-    // Function to format the date and time
-    function formatDateTime(date) {
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        };
-        return date.toLocaleDateString('en-US', options);
-    }
-
-    // Display the current date and time
-    document.getElementById('currentDateTime').innerText = formatDateTime(new Date());
-
-    // Function to save the page as PDF
-    function saveAsPDF() {
-        window.print();
-    }
-</script>
