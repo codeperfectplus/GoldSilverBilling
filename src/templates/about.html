@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% block title %}About Gold Price Calculator{% endblock %}
+{% block styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .about-section {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-section h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .about-section p {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>About Gold Price Calculator</h1>
+    <div class="about-section">
+        <h2>Our Mission</h2>
+        <p>Our mission is to simplify the process of calculating gold prices for jewellers and customers alike. We aim
+            to provide a user-friendly tool that allows for accurate and efficient calculations, ensuring transparency
+            and trust in every transaction.</p>
+
+        <h2>Who We Are</h2>
+        <p>We are a dedicated team of software developers and industry experts who recognized the need for a reliable
+            and easy-to-use gold price calculator. With years of experience in the tech and jewelry industries, we’ve
+            built a tool that bridges the gap between traditional practices and modern technology.</p>
+
+        <h2>Why Choose Us</h2>
+        <p>Our Gold Price Calculator stands out due to its accuracy, customizability, and ease of use. Whether you're a
+            small jeweller or a large retail chain, our calculator is designed to meet your needs, offering flexibility
+            and precision at every step.</p>
+    </div>
+</div>
+
+{% endblock %}

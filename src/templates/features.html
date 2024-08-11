@@ -1,0 +1,75 @@
+{% extends 'base/base.html' %}
+{% block title %}Features{% endblock %}
+{% block styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .feature {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #007bff;
+        border-radius: 10px;
+    }
+
+    .feature h2 {
+        color: #007bff;
+    }
+
+    .icon {
+        font-size: 50px;
+        color: #007bff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Features of Gold Price Calculator</h1>
+
+    <div class="feature">
+        <h2>Real-time Price Calculation</h2>
+        <p>Calculate the total price of gold jewelry in real-time based on the weight, price per gram, service charges,
+            and taxes.</p>
+    </div>
+
+    <div class="feature">
+        <h2>User-friendly Interface</h2>
+        <p>Easy-to-use interface that allows users to input details and get instant results with a clear and intuitive
+            design.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Customizable Service Charges and Taxes</h2>
+        <p>Adjust service charge and tax rates according to your needs, giving you flexibility in billing calculations.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h2>Responsive Design</h2>
+        <p>The application is fully responsive and works seamlessly on desktops, tablets, and mobile devices.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Secure Data Handling</h2>
+        <p>All calculations are handled securely, ensuring that user data is protected and processed safely.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Customizable for Business Needs</h2>
+        <p>Tailor the calculator to meet specific business requirements, including custom branding and additional
+            features.</p>
+    </div>
+</div>
+{% endblock %}

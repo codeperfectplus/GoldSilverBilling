@@ -1,0 +1,113 @@
+{% extends 'base/base.html' %}
+{% block title %} Gold Price Bill {% endblock %}
+{% block styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        padding: 20px;
+        border: 1px solid #007bff;
+        border-radius: 10px;
+    }
+
+    .card h2 {
+        color: #007bff;
+    }
+
+    .date-time {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .disclaimer {
+        margin-top: 20px;
+        color: #ff0000;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .save-pdf {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Gold Price Bill</h1>
+    <div class="card">
+        <h3>Jeweller Details</h3>
+        <p><strong>Name:</strong> Shining Gold Jewellers</p>
+        <p><strong>Address:</strong> 123 Gold Street, Mumbai, Maharashtra, India</p>
+        <p><strong>Contact:</strong> +91 9876543210</p>
+        <hr>
+        <p><strong>Weight:</strong> {{ weight }} grams</p>
+        <p><strong>Price per gram:</strong> ₹{{ price_per_gram }}</p>
+        <hr>
+        <p><strong>Base Price:</strong> ₹{{ bill['Base Price'] | int }}</p>
+        <p><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong> ₹{{ bill['Service Charge'] | int
+            }}</p>
+        <p><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong> ₹{{ bill['Tax'] | int }}</p>
+        <hr>
+        <h2><strong>Total Amount Payable:</strong> ₹{{ bill['Final Price'] }}</h2>
+        <p class="text-center mt-4">Thank you for your purchase!</p>
+        <div class="text-center">
+            <a href="/" class="btn btn-primary mt-3">Calculate Again</a>
+        </div>
+    </div>
+
+    <!-- Date and Time -->
+    <div class="date-time">
+        <p><strong>Date and Time:</strong> <span id="currentDateTime"></span></p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+        <p><strong>Disclaimer:</strong> This is not an official bill. It is just an illustration to show the pricing.
+            Partial display of this webpage is not allowed.</p>
+    </div>
+
+    <!-- Save as PDF Option -->
+    <div class="save-pdf">
+        <button onclick="saveAsPDF()" class="btn btn-success">Save as PDF</button>
+    </div>
+</div>
+{% endblock %}
+<!-- Script to Show Date and Time and Save as PDF -->
+<script>
+    // Function to format the date and time
+    function formatDateTime(date) {
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        };
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    // Display the current date and time
+    document.getElementById('currentDateTime').innerText = formatDateTime(new Date());
+
+    // Function to save the page as PDF
+    function saveAsPDF() {
+        window.print();
+    }
+</script>
