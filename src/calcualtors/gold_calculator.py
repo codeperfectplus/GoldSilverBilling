@@ -1,4 +1,4 @@
-class GoldPriceItem:
+class GoldCalculator:
     """
     A class to represent an item for which the gold price is calculated.
 
@@ -81,3 +81,4 @@ class GoldPriceItem:
             "Tax Percentage": self.tax,
             "Final Price": final_price
         }
+

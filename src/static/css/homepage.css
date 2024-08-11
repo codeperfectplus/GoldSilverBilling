@@ -4,42 +4,48 @@ body {
 
 .container {
     margin-top: 50px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.card-container {
     display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.main-content {
-    flex: 2;
-    margin-right: 20px;
-}
-
-.sidebar {
+.card {
     flex: 1;
+    max-width: 300px;
     padding: 20px;
     border: 1px solid #007bff;
     border-radius: 10px;
     background-color: #ffffff;
-}
-
-h1 {
-    color: #343a40;
     text-align: center;
-    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
+.card h2 {
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.card p {
     margin-bottom: 20px;
 }
 
 .btn-custom {
     background-color: #007bff;
     color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
 }
 
 .btn-custom:hover {
     background-color: #0056b3;
-    color: white;
-}
-
-.sidebar h2 {
-    color: #007bff;
 }

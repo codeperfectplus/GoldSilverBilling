@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% block title %} New Calculator Coming Soon {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/other_calculators.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h1>New Calculator Coming Soon!</h1>
+        <p>We're working hard to bring you a new calculator tool. Stay tuned for updates and check back later!</p>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-custom">Go Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
