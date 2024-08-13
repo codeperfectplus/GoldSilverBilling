@@ -8,7 +8,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="bill-card">
-            <h2>Calcualtion Detials (Gold)</h2>
+            <h2>Calculation Details (Gold)</h2>
             <div class="details">
                 <span><strong>Gold Item Weight:</strong></span>
                 <span>{{ weight }} grams</span>
@@ -37,11 +37,12 @@
                 <span><strong>Total Amount Payable:</strong></span>
                 <span>₹{{ bill['Final Price'] | float}}</span>
             </div>
-            <p class="text-center mt-4"> Final amount rounded to nearest integer</p>
+            <p class="text-center mt-4">Final amount rounded to nearest integer</p>
             <p class="text-center mt-4">Thank you for your purchase!</p>
             <div class="text-center">
                 <a href="{{ url_for('gold_calculator') }}" class="btn btn-custom mt-3">Calculate Again</a>
                 <a href="{{ url_for('silver_calculator') }}" class="btn btn-custom mt-3">Silver Calculator</a>
+                <button onclick="window.print()" class="btn btn-primary mt-3">Print PDF</button>
             </div>
         </div>
         <!-- Disclaimer -->
@@ -59,7 +60,6 @@
         <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
         <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
         <p><strong>Gold Rate(Per gm):</strong> ₹ {{ price_per_gram }} </p>
-    
     </div>
 </div>
 {% endblock %}
