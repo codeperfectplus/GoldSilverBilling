@@ -1,4 +1,4 @@
-# Gold-Price-Calculator
+# Gold Silver Billing
 
 ## Our Mission
 
@@ -21,7 +21,7 @@ sudo docker run -p 5000:5000 flask-gold-price-app
 
 ## Product Screenshots
 
-![Home page](/src/images/homepage.png)
+![Home page](/images/homepage.png)
 
-![Bill Page](/src/images/bill_page.png)
+![Bill Page](/images/bill_page.png)
    
