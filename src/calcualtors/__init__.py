@@ -1,2 +1,0 @@
-from src.calcualtors.gold_calculator import GoldCalculator
-from src.calcualtors.silver_calcualtor import SilverCalculator

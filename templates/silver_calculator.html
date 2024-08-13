@@ -10,27 +10,26 @@
         <h1>Silver Price Calculator</h1>
         <p class="text-center">Get accurate silver prices with our easy-to-use calculator!</p>
         
-        <!-- Calculator Form -->
         <form action="/silver-calculator" method="POST" class="shadow p-4 bg-white rounded">
             <div class="form-group">
                 <label for="weight">Weight (grams):</label>
                 <input type="number" id="weight" name="weight" step="0.01" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="price_per_gram">Price per gram (₹):</label>
-                <input type="number" id="price_per_gram" name="price_per_gram" step="0.01" class="form-control" value="{{ price_per_gram }}" required>
-            </div>
-            <div class="form-group">
                 <label for="purity">Purity (%):</label>
                 <input type="number" id="purity" name="purity" step="0.1" max="100" min="0" class="form-control" required>
             </div>
             <div class="form-group">
+                <label for="price_per_gram">Price(gm) (₹):</label>
+                <input type="number" id="price_per_gram" name="price_per_gram" step="0.01" class="form-control" value="{{ price_per_gram }}" required>
+            </div>
+            <div class="form-group">
                 <label for="service_charge">Service Charge (%):</label>
-                <input type="number" id="service_charge" name="service_charge" step="0.1" value="17" class="form-control">
+                <input type="number" id="service_charge" name="service_charge" step="0.1" value="{{ service_charge }}" class="form-control">
             </div>
             <div class="form-group">
                 <label for="tax">Tax (%):</label>
-                <input type="number" id="tax" name="tax" step="0.1" value="3" class="form-control">
+                <input type="number" id="tax" name="tax" step="0.1" value="{{ tax }}" class="form-control">
             </div>
             <button type="submit" class="btn btn-custom btn-block">Generate Bill</button>
         </form>

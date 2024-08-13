@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% block title %} Gold Price Bill {% endblock %}
+{% block title %} Silver Price Bill {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bill.css') }}">
 {% endblock %}
@@ -8,14 +8,18 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="bill-card">
-            <h2>Bill Details</h2>
+            <h2>Calcualtion Detials (Silver)</h2>
             <div class="details">
-                <span><strong>Gold Item Weight:</strong></span>
+                <span><strong>Silver Item Weight:</strong></span>
                 <span>{{ weight }} grams</span>
             </div>
             <div class="details">
-                <span><strong>Price per gram:</strong></span>
+                <span><strong>Price(gm)</strong></span>
                 <span>₹{{ price_per_gram }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Silver Purity:</strong></span>
+                <span>{{ purity }} %</span>
             </div>
             <div class="details">
                 <span><strong>Base Price:</strong></span>
@@ -31,12 +35,13 @@
             </div>
             <div class="details total">
                 <span><strong>Total Amount Payable:</strong></span>
-                <span>₹{{ bill['Final Price'] | float}}</span>
+                <span>₹{{ bill['Final Price'] | float }}</span>
             </div>
-            <p class="text-center mt-4"> Final amount rounded to nearest integer</p>
+            <p class="text-center mt-4">Final amount rounded to nearest integer</p>
             <p class="text-center mt-4">Thank you for your purchase!</p>
             <div class="text-center">
-                <a href="/" class="btn btn-custom mt-3">Calculate Again</a>
+                <a href="{{ url_for('silver_calculator') }}" class="btn btn-custom mt-3">Calculate Again</a>
+                <a href="{{ url_for('gold_calculator') }}" class="btn btn-custom mt-3">Gold Calculator</a>
             </div>
         </div>
         <!-- Disclaimer -->
@@ -53,8 +58,7 @@
         <p><strong>Email:</strong> {{ config["JEWELLER_EMAIL"] }}</p>
         <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
         <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
-        <p><strong>Gold Rate(Per gm):</strong> ₹ {{ price_per_gram }} </p>
-    
+        <p><strong>Silver Rate (Per gm):</strong> ₹ {{ price_per_gram }} </p>
     </div>
 </div>
 {% endblock %}

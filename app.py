@@ -3,7 +3,8 @@ import json
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from flask_session import Session
 
-from src.calcualtors import GoldCalculator, SilverCalculator
+from calcualtors.gold_calculator import GoldCalculator
+from calcualtors.silver_calcualtor import SilverCalculator
 
 app = Flask(__name__)
 
@@ -40,20 +41,24 @@ def gold_calculator():
         try:
             weight = float(request.form['weight'])
             gold_price_per_gram = float(request.form['price_per_gram'])
-            service_charge = float(request.form['service_charge'])
-            tax = float(request.form['tax'])
+            gold_service_charge = float(request.form['service_charge'])
+            gold_tax = float(request.form['tax'])
+            purity = request.form['purity']
             
             # Save price per gram to session
             session['gold_price_per_gram'] = gold_price_per_gram
+            session['gold_service_charge'] = gold_service_charge
+            session['gold_tax'] = gold_tax
 
             # Calculate gold price
-            gold_item = GoldCalculator(weight, gold_price_per_gram, service_charge, tax)
+            gold_item = GoldCalculator(weight, gold_price_per_gram, gold_service_charge, gold_tax)
             bill_details = gold_item.calculate_price()
             
             return render_template('gold_bill.html', 
                                    bill=bill_details, 
                                    weight=weight, 
-                                   price_per_gram=gold_price_per_gram, 
+                                   price_per_gram=gold_price_per_gram,
+                                   purity=purity,
                                    config=app.config)
         except ValueError as e:
             flash(f"Input error: {str(e)}", 'error')
@@ -61,8 +66,12 @@ def gold_calculator():
     
     # Use session-stored price per gram or a default value
     gold_price_per_gram = session.get('gold_price_per_gram', 6445)
-    return render_template('gold_calculator.html', 
-                           price_per_gram=gold_price_per_gram, 
+    gold_service_charge = session.get('gold_service_charge', 0)
+    gold_tax = session.get('gold_tax', 0)
+    return render_template('gold_calcualtor.html', 
+                           price_per_gram=gold_price_per_gram,
+                           service_charge=gold_service_charge,
+                           tax=gold_tax,
                            config=app.config)
 
 @app.route('/silver-calculator', methods=['GET', 'POST'])
@@ -71,20 +80,22 @@ def silver_calculator():
         try:
             weight = float(request.form['weight'])
             silver_price_per_gram = float(request.form['price_per_gram'])
-            purity = float(request.form['purity'])
-            service_charge = float(request.form['service_charge'])
-            tax = float(request.form['tax'])
+            silver_purity = float(request.form['purity'])
+            silver_service_charge = float(request.form['service_charge'])
+            silver_tax = float(request.form['tax'])
 
             # Save price per gram to session
             session['silver_price_per_gram'] = silver_price_per_gram
+            session['silver_service_charge'] = silver_service_charge
+            session['silver_tax'] = silver_tax
             
             # Calculate silver price
             silver_item = SilverCalculator(
                 weight=weight,
                 price_per_gram=silver_price_per_gram,
-                service_charge=service_charge,
-                tax=tax,
-                purity=purity
+                service_charge=silver_service_charge,
+                tax=silver_tax,
+                purity=silver_purity
             )
             bill_details = silver_item.calculate_price()
             
@@ -92,7 +103,7 @@ def silver_calculator():
                                    bill=bill_details, 
                                    weight=weight, 
                                    price_per_gram=silver_price_per_gram, 
-                                   purity=purity, 
+                                   purity=silver_purity, 
                                    config=app.config)
         except ValueError as e:
             flash(f"Input error: {str(e)}", 'error')
@@ -100,8 +111,12 @@ def silver_calculator():
 
     # Use session-stored price per gram or a default value
     silver_price_per_gram = session.get('silver_price_per_gram', 0)
+    silver_service_charge = session.get('silver_service_charge', 0)
+    silver_tax = session.get('silver_tax', 0)
     return render_template('silver_calculator.html', 
-                           price_per_gram=silver_price_per_gram, 
+                           price_per_gram=silver_price_per_gram,
+                           service_charge=silver_service_charge,
+                           tax=silver_tax,
                            config=app.config)
 
 @app.route('/pricing')
@@ -121,4 +136,4 @@ def other_calculators():
     return render_template('other_calculators.html', config=app.config)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
