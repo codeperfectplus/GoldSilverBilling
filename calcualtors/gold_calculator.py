@@ -67,7 +67,7 @@ class GoldCalculator:
             dict: A dictionary with the base price, service charge, service charge percentage,
                   tax, tax percentage, and final price.
         """
-        base_price = self.weight * self.price_per_gram
+        base_price = round(self.weight * self.price_per_gram, 2)
         service_charge = self.calculate_service_charge(base_price)
         total_price = base_price + service_charge
         tax = self.calculate_tax(total_price)

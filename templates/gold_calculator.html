@@ -11,25 +11,21 @@
         <h1>Gold Price Calculator</h1>
         <p class="text-center">It's quick, easy, and accurate! with a clear and intuitive design.</p>
         <form action="/gold-calculator" method="POST" class="form-card shadow p-4 bg-white rounded">
+            
             <div class="form-group">
                 <label for="weight">Weight (grams): <i class="fa-solid fa-scale-balanced"></i></label>
                 <input type="number" step="0.01" name="weight" id="weight" class="form-control" placeholder="Enter weight in grams" required>
             </div>
+
             <div class="form-group">
-                <label>Gold Purity: <i class="fa-solid fa-magnifying-glass"></i></label>
-                <div class="form-check">
-                    <input type="radio" name="purity" value="18k" id="18k" class="form-check-input">
-                    <label for="18k" class="form-check-label">18k</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" name="purity" value="22k" id="22k" class="form-check-input" checked>
-                    <label for="22k" class="form-check-label">22k</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" name="purity" value="24k" id="24k" class="form-check-input">
-                    <label for="24k" class="form-check-label">24k</label>
-                </div>
-            </div>            
+                <label for="purity">Gold Purity: <i class="fa-solid fa-magnifying-glass"></i></label>
+                <select name="purity" id="purity" class="form-control" required>
+                    <option value="18k">18k</option>
+                    <option value="22k" selected>22k</option>
+                    <option value="24k">24k</option>
+                </select>
+            </div>
+                 
             <div class="form-group">
                 <label for="price_per_gram">Price per gram (INR): <i class="fa-solid fa-weight-hanging"></i></label>
                 <input type="number" step="0.01" name="price_per_gram" id="price_per_gram" class="form-control" placeholder="Enter price per gram" value="{{ price_per_gram }}" required>
@@ -39,10 +35,12 @@
                 <label for="service_charge">Service Charge (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
                 <input type="number" step="0.01" name="service_charge" id="service_charge" class="form-control" placeholder="Enter service charge percentage" value="{{ service_charge }}" required>
             </div>
+
             <div class="form-group">
                 <label for="tax">Tax (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
                 <input type="number" step="0.01" name="tax" id="tax" class="form-control" placeholder="Enter tax percentage" value="{{ tax }}" required>
             </div>
+            
             <button type="submit" class="btn btn-hero btn-block mt-4">Generate Estimate Bill</button>
         </form>
     </div>
