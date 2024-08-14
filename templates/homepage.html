@@ -4,22 +4,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
 {% endblock %}
 {% block content %}
-<div class="hero">
+<div class="hero mt-4">
     <h1>Welcome to the Pricing Calculator</h1>
     <p>Select a calculator to get started.</p>
-</div>
-<div class="container">
-    <div class="card-container">
-        <div class="card">
-            <h2>Gold Price Calculator</h2>
-            <p>Calculate the price of gold based on weight, price per gram, service charge, and tax.</p>
-            <a href="{{ url_for('gold_calculator') }}" class="btn btn-custom">Go to Gold Calculator</a>
-        </div>
-        <div class="card">
-            <h2>Silver Price Calculator</h2>
-            <p>Estimate the price of silver with similar parameters as the gold calculator.</p>
-            <a href="{{ url_for('silver_calculator') }}" class="btn btn-custom">Go to Silver Calculator</a>
-        </div>
+    <div class="hero-buttons">
+        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero">Gold Calculator</a>
+        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero">Silver Calculator</a>
     </div>
 </div>
 {% endblock %}

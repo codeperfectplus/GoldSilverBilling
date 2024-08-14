@@ -1,44 +1,63 @@
+/* General Styles */
 body {
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
+/* Container */
 .container {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 50px;
+    margin: 50px auto;
+    max-width: 1200px;
     gap: 20px;
 }
 
+/* Main Content */
 .main-content {
     flex: 2;
     margin-right: 20px;
 }
 
+/* Sidebar */
 .sidebar {
     flex: 1;
     padding: 20px;
     border: 1px solid #007bff;
-    border-radius: 10px;
-    background-color: #ffffff;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-h1 {
-    color: #343a40;
-    text-align: center;
-    margin-bottom: 30px;
+.sidebar:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Bill Card */
 .bill-card {
     padding: 20px;
     border: 1px solid #007bff;
-    border-radius: 10px;
-    background-color: #ffffff;
-    margin-bottom: 20px;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.bill-card:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.02);
 }
 
 .bill-card h2 {
     color: #007bff;
     margin-bottom: 20px;
+    font-size: 1.75rem;
+    font-weight: bold;
 }
 
 .bill-card .details {
@@ -52,32 +71,49 @@ h1 {
     border-bottom: none;
 }
 
-.date-time, .disclaimer, .save-pdf {
-    text-align: center;
-    margin-top: 20px;
+.bill-card .details span {
+    font-size: 1rem;
 }
 
-.disclaimer {
-    color: #ff0000;
-    font-size: 14px;
-}
-
-.save-pdf {
-    margin-top: 20px;
-}
-
+/* Buttons */
 .btn-custom {
-    background-color: #007bff;
+    background: linear-gradient(45deg, #007bff, #0056b3);
     color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .btn-custom:hover {
-    background-color: #0056b3;
-    color: white;
+    background: linear-gradient(45deg, #0056b3, #003d7a);
+    transform: scale(1.05);
 }
 
-.sidebar h2 {
-    color: #007bff;
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Disclaimer */
+.disclaimer {
+    text-align: center;
+    color: #ff0000;
+    font-size: 0.875rem;
+    margin-top: 20px;
 }
 
 /* Mobile Styles */

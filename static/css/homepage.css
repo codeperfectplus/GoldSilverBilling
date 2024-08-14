@@ -2,12 +2,81 @@ body {
     background-color: #f8f9fa;
 }
 
-.container {
-    margin-top: 50px;
+.hero {
+    background: linear-gradient(135deg, #81a0f3, #1a466d);
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
 }
 
-.text-center {
-    text-align: center;
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: fadeInDown 1s ease-in-out;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.btn-hero {
+    background-color: #fff;
+    color: #ff7e5f;
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-hero:hover {
+    background-color: #ff5f5f;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .card-container {
@@ -15,6 +84,7 @@ body {
     justify-content: space-around;
     flex-wrap: wrap;
     gap: 20px;
+    margin-top: 50px;
 }
 
 .card {
@@ -26,12 +96,11 @@ body {
     background-color: #ffffff;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-10px);
 }
 
 .card h2 {
@@ -50,45 +119,23 @@ body {
     border-radius: 5px;
     text-decoration: none;
     font-size: 16px;
-    transition: background-color 0.2s;
 }
 
 .btn-custom:hover {
     background-color: #0056b3;
 }
 
-/* Hero Section */
-.hero {
-    background: linear-gradient(120deg, #f0f0f0, #d4d4d4);
-    padding: 2rem 0;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-}
-
-/* Mobile Styles */
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .hero h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
+
     .hero p {
-        font-size: 1rem;
-    }
-    .card {
-        padding: 1rem;
-    }
-    .card h2 {
         font-size: 1.25rem;
     }
-    .card p {
-        font-size: 0.875rem;
+
+    .btn-hero {
+        padding: 10px 20px;
+        font-size: 1rem;
     }
 }
