@@ -4,7 +4,9 @@ body {
 
 .container {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 50px;
+    gap: 20px;
 }
 
 .main-content {
@@ -76,4 +78,46 @@ h1 {
 
 .sidebar h2 {
     color: #007bff;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        margin-right: 0;
+    }
+
+    .btn-primary.btn-block {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .bill-card {
+        padding: 15px;
+    }
+
+    .bill-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .bill-card .details {
+        font-size: 0.875rem;
+    }
+
+    .sidebar {
+        margin-top: 20px;
+    }
+
+    .sidebar h2 {
+        font-size: 1.25rem;
+    }
+
+    .btn-custom, .btn-primary {
+        padding: 10px 0;
+        font-size: 0.875rem;
+    }
 }

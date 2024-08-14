@@ -26,6 +26,12 @@ body {
     background-color: #ffffff;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card h2 {
@@ -44,8 +50,45 @@ body {
     border-radius: 5px;
     text-decoration: none;
     font-size: 16px;
+    transition: background-color 0.2s;
 }
 
 .btn-custom:hover {
     background-color: #0056b3;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(120deg, #f0f0f0, #d4d4d4);
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 576px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .card {
+        padding: 1rem;
+    }
+    .card h2 {
+        font-size: 1.25rem;
+    }
+    .card p {
+        font-size: 0.875rem;
+    }
 }
