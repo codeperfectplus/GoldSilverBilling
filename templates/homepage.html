@@ -8,8 +8,10 @@
     <h1>Welcome to the Pricing Calculator</h1>
     <p>Select a calculator to get started.</p>
     <div class="hero-buttons">
-        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero">Gold Calculator</a>
-        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero">Silver Calculator</a>
+        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-coins"></i> Gold Calculator</a>
+        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-gem"></i> Silver Calculator</a>
+        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-medal"></i> Features</a>
+        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> Pricing</a>
     </div>
 </div>
 {% endblock %}
