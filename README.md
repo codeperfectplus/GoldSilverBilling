@@ -13,19 +13,21 @@ Our mission is to simplify the process of calculating gold prices for jewellers 
 1. **Build the Docker image:**
 
 ```bash
-docker build -t flask-gold-price-app .
+docker build -t GoldSilverBilling .
 ```
 
 2. **Run the Docker container:**
 
 ```bash
-sudo docker run -p 5000:5000 flask-gold-price-app
+sudo docker run -p 5000:5000 GoldSilverBilling
 ```
 
 
 ## Product Screenshots
 
-![Home page](/images/homepage.png)
+![Homepage](/images/homepage.png)
 
-![Bill Page](/images/bill_page.png)
+![Gold Calculator](/images/gold_calculator.png)
+
+![Gold Home Page](/images/bill_page.png)
    
