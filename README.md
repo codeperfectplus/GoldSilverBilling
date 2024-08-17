@@ -1,5 +1,7 @@
 # Gold Silver Billing
 
+![Homepage](/images/homepage.png)
+
 ## Our Mission
 
 Our mission is to simplify the process of calculating gold prices for jewellers and customers alike. We aim to provide a user-friendly tool that allows for accurate and efficient calculations, ensuring transparency and trust in every transaction.
@@ -13,19 +15,17 @@ Our mission is to simplify the process of calculating gold prices for jewellers 
 1. **Build the Docker image:**
 
 ```bash
-docker build -t GoldSilverBilling .
+docker build -t goldsilverbilling .
 ```
 
 2. **Run the Docker container:**
 
 ```bash
-sudo docker run -p 5000:5000 GoldSilverBilling
+sudo docker run -p 5000:5000 goldsilverbilling
 ```
 
 
 ## Product Screenshots
-
-![Homepage](/images/homepage.png)
 
 ![Gold Calculator](/images/gold_calculator.png)
 
