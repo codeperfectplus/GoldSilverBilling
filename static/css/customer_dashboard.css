@@ -1,0 +1,21 @@
+.customer-dashboard {
+    background-color: #e6f7ff; /* Light blue background */
+    border-left: 5px solid #007bff; /* Blue border */
+    margin-top: 80px;
+}
+
+.profile-summary, .recent-activity {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.profile-summary ul, .recent-activity ul {
+    padding-left: 20px;
+}
+
+.profile-summary h3, .recent-activity h3 {
+    color: #007bff;
+}

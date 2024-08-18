@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h2 class="dashboard-title">Admin Dashboard</h2>
+    <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
+    
+    <div class="stats-cards">
+        <div class="card">
+            <h3>Total Users</h3>
+            <p>1024</p>
+        </div>
+        <div class="card">
+            <h3>Active Sessions</h3>
+            <p>128</p>
+        </div>
+        <div class="card">
+            <h3>System Health</h3>
+            <p>Good</p>
+        </div>
+    </div>
+
+    <div class="admin-tools">
+        <h3>Admin Tools</h3>
+        <ul>
+            <li><a href="#">User Management</a></li>
+            <li><a href="#">View Reports</a></li>
+            <li><a href="#">System Settings</a></li>
+            <li><a href="#">Audit Logs</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

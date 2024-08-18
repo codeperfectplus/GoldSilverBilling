@@ -3,3 +3,5 @@ flask
 flask-session
 gunicorn
 flask-sqlalchemy
+Flask-Login
+Flask-Bcrypt

@@ -12,7 +12,12 @@
         <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-gem"></i> Silver Calculator</a>
         <a href="{{ url_for('features') }}" class="btn btn-hero"><i class="fa-solid fa-medal"></i> Features</a>
         <a href="{{ url_for('pricing') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> Pricing</a>
-        <a href="{{ url_for('history') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> History</a>
+        {% if current_user.is_authenticated %}
+            {% if current_user.user_level == 'admin' %}
+                <a href="{{ url_for('history') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> History</a>
+            {% endif %}
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

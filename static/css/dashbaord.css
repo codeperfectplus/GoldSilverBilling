@@ -1,0 +1,35 @@
+.dashboard-container, .customer-dashboard, .manager-dashboard {
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+.dashboard-title {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.welcome-message {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+h3 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 10px;
+}

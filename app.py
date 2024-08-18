@@ -4,9 +4,14 @@ import logging
 import csv
 from io import StringIO, BytesIO
 from datetime import datetime
+
 from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, send_file
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin
+from flask_login import current_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from calcualtors import GoldCalculator, SilverCalculator
 
 # Initialize the Flask app
@@ -19,6 +24,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Session(app)
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 # Load configuration from JSON file
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -59,6 +67,19 @@ class SilverTransaction(db.Model):
     tax = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(20), nullable=False)
+    lname = db.Column(db.String(20), nullable=False)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    user_level = db.Column(db.String(10), nullable=False, default='customer')
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.user_level}')"
+
 
 # Create the database
 with app.app_context():
@@ -194,7 +215,10 @@ def silver_calculator():
                            config=app.config)
 
 @app.route('/history', methods=['GET'])
+@login_required
 def history():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home')) 
     selected_type = request.args.get('type', 'all')
 
     if selected_type == 'gold':
@@ -266,6 +290,55 @@ def features() -> str:
 @app.route('/about')
 def about() -> str:
     return render_template('about.html', config=app.config)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        fname = request.form.get('fname')
+        lname = request.form.get('lname')
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8')
+        user_level = request.form.get('user_level')
+        user = User(fname=fname, lname=lname, username=username, email=email, password=password, user_level=user_level)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+    return render_template('login.html')
+
+
+from flask_login import current_user, login_required
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    if current_user.user_level == 'admin':
+        return render_template('admin_dashboard.html')
+    elif current_user.user_level == 'manager':
+        return render_template('manager_dashboard.html')
+    else:
+        return render_template('customer_dashboard.html')
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
