@@ -47,6 +47,8 @@ def load_config() -> dict:
 app.config.update(load_config())
 
 # Define the database models
+
+
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     weight = db.Column(db.Float, nullable=False)
@@ -56,6 +58,7 @@ class GoldTransaction(db.Model):
     tax = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class SilverTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,6 +88,17 @@ class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(10), nullable=False)
     theme = db.Column(db.String(10), nullable=False)
+
+
+class AuditLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    action = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    details = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return f"AuditLog('{self.user_id}', '{self.action}', '{self.timestamp}')"
 
 
 # Create the database
@@ -337,6 +351,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
+            log_action(user.id, 'Login')
             return redirect(url_for('dashboard'))
     return render_template('login.html')
 
@@ -376,6 +391,7 @@ def dashboard():
 @app.route("/logout")
 def logout():
     logout_user()
+    log_action(current_user.id, 'Logout')
     return redirect(url_for('login'))
 
 
@@ -425,10 +441,28 @@ def settings():
         db.session.add(settings)
         db.session.commit()
         flash('Settings updated successfully!', 'success')
+        log_action(current_user.id, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
         return redirect(url_for('settings'))
     
     settings = Settings.query.first()
     return render_template('settings.html', settings=settings)
+
+
+def log_action(user_id, action, details=None):
+    log_entry = AuditLog(user_id=user_id, action=action, details=details)
+    db.session.add(log_entry)
+    db.session.commit()
+
+
+@app.route('/admin/audit_log')
+@login_required
+def audit_log():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home'))
+
+    logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).all()
+    return render_template('audit_log.html', logs=logs)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
