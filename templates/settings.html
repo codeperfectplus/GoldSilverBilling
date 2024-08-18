@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% block title %} System Settings {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>System Settings</h1>
+    <form method="POST" action="{{ url_for('settings') }}">
+        <div class="form-group">
+            <label for="currency">Currency</label>
+            <select name="currency" id="currency" class="form-control">
+                <option value="INR" {% if settings and settings.currency == 'INR' %}selected{% endif %}>INR</option>
+                <option value="USD" {% if settings and settings.currency == 'USD' %}selected{% endif %}>USD</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="theme">Theme</label>
+            <select id="theme" name="theme" class="form-control">
+                <option value="light" {% if settings and settings.theme == 'light' %}selected{% endif %}>Light</option>
+                <option value="dark" {% if settings and settings.theme == 'dark' %}selected{% endif %}>Dark</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
+    </form>
+</div>
+{% endblock %}

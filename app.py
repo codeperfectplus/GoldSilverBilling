@@ -67,6 +67,7 @@ class SilverTransaction(db.Model):
     total = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(20), nullable=False)
@@ -78,6 +79,12 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.user_level}')"
+
+
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    currency = db.Column(db.String(10), nullable=False)
+    theme = db.Column(db.String(10), nullable=False)
 
 
 # Create the database
@@ -106,6 +113,10 @@ def page_not_found(e):
 @app.route('/')
 def home() -> str:
     return render_template('homepage.html')
+
+@app.context_processor
+def inject_theme():
+    return dict(current_theme=app.config.get('THEME', 'light'))
 
 # Gold calculator route
 @app.route('/gold-calculator', methods=['GET', 'POST'])
@@ -390,6 +401,34 @@ def manage_users():
 
     return render_template('manage_users.html', users=users)
 
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        currency = request.form.get('currency')
+        theme = request.form.get('theme')
+
+        # Save the settings (you might save them to a database or a config file)
+        # Assuming you have a Settings model or similar logic to save settings
+        settings = Settings.query.first()
+        if not settings:
+            settings = Settings(currency=currency, theme=theme)
+        else:
+            settings.currency = currency
+            settings.theme = theme
+
+        flash(f'Settings updated successfully. Currency set to {currency}. Theme set to {theme}.', 'success')
+        
+        db.session.add(settings)
+        db.session.commit()
+        flash('Settings updated successfully!', 'success')
+        return redirect(url_for('settings'))
+    
+    settings = Settings.query.first()
+    return render_template('settings.html', settings=settings)
 
 if __name__ == '__main__':
     app.run(debug=True)
