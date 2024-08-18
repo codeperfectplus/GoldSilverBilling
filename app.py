@@ -10,8 +10,6 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin
-from flask_login import current_user, login_required
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from calcualtors import GoldCalculator, SilverCalculator
 
@@ -86,15 +84,23 @@ class User(db.Model, UserMixin):
 with app.app_context():
     db.create_all()
 
-# Health check endpoint
-@app.route('/health', methods=['GET'])
-def health() -> jsonify:
-    return jsonify({
+@app.route('/health')
+def health():
+    health_info = {
         "status": "healthy",
         "message": "The server is up and running.",
         "version": "1.0.0",
         "timestamp": datetime.now().isoformat()
-    })
+    }
+    return render_template('health.html', **health_info)
+
+@app.route('/permission-denied')
+def permission_denied():
+    return render_template('permission_denied.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 # Home route
 @app.route('/')
@@ -219,7 +225,7 @@ def silver_calculator():
 @login_required
 def history():
     if current_user.user_level != 'admin':
-        return redirect(url_for('home')) 
+        return redirect(url_for('permission_denied'))
     selected_type = request.args.get('type', 'all')
 
     if selected_type == 'gold':
@@ -366,7 +372,7 @@ def logout():
 @login_required
 def manage_users():
     if current_user.user_level != 'admin':
-        return redirect(url_for('home'))
+        return redirect(url_for('permission_denied'))
 
     users = User.query.all()
 

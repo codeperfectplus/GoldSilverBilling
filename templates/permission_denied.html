@@ -1,0 +1,12 @@
+{% extends 'base/base.html' %}
+{% block title %} Health {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/permission_denied.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Permission Denied</h1>
+        <p>You do not have enough permissions to access this page.</p>
+        <a href="{{ url_for('home') }}" class="btn btn-hero mt-4">Go to Home Page</a>
+    </div>
+{% endblock %}
