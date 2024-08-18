@@ -30,7 +30,8 @@
                 <label for="tax">Tax (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
                 <input type="number" id="tax" name="tax" step="0.1" value="{{ tax }}" class="form-control">
             </div>
-            <button type="submit" class="btn btn-custom btn-block">Generate Estimate Bill</button>
+            <button type="submit" class="btn btn-hero btn-block mt-4">Generate Estimate Bill</button>
+            <a href="{{ url_for('history') }}" class="btn btn-hero mt-4">Previous History</a>
         </form>
     </div>
 
