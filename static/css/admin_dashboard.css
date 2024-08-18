@@ -69,3 +69,17 @@
 .admin-tools ul li a:hover {
     color: #0056b3;
 }
+
+.disabled-link {
+    color: grey;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.disabled-link:hover {
+    text-decoration: none; /* Prevents underline on hover */
+}
+
+.disabled-link:focus {
+    outline: none; /* Prevents focus outline */
+}

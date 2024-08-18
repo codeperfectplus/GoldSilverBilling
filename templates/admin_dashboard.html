@@ -15,25 +15,34 @@
     <div class="stats-cards">
         <div class="card">
             <h3>Total Users</h3>
-            <p>1024</p>
+            <p>{{ total_users }}</p>  <!-- Display dynamic user count -->
         </div>
         <div class="card">
-            <h3>Active Sessions</h3>
-            <p>128</p>
+            <h3>Sessions</h3>
+            <p>{{ active_sessions }}</p>  <!-- Display dynamic active sessions -->
         </div>
         <div class="card">
-            <h3>System Health</h3>
-            <p>Good</p>
+            <h3>Health</h3>
+            <p>{{ system_health }}</p>  <!-- Display dynamic system health -->
+        </div>
+        <div class="card">
+            <h3>Cpu Core</h3>
+            <p>{{ cpu_core }}</p>  <!-- Display dynamic system health -->
+        </div>
+        <div class="card">
+            <h3>Cpu Utilization</h3>
+            <p>{{ cpu_util }}</p>  <!-- Display dynamic system health -->
         </div>
     </div>
 
     <div class="admin-tools">
         <h3>Admin Tools</h3>
         <ul>
-            <li><a href="#">User Management</a></li>
-            <li><a href="#">View Reports</a></li>
-            <li><a href="#">System Settings</a></li>
-            <li><a href="#">Audit Logs</a></li>
+            <li><a href="{{ url_for('manage_users') }}">Manage Users</a></li>
+            <li><a href="{{ url_for('history') }}">History</a></li>
+            <li><span class="disabled-link">User Management</span></li>
+            <li><span class="disabled-link">System Settings</span></li>
+            <li><span class="disabled-link">Audit Logs</span></li>
         </ul>
     </div>
 </div>

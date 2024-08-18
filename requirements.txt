@@ -5,3 +5,4 @@ gunicorn
 flask-sqlalchemy
 Flask-Login
 Flask-Bcrypt
+psutil

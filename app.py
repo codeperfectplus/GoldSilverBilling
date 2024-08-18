@@ -2,6 +2,7 @@ import os
 import json
 import logging 
 import csv
+import psutil
 from io import StringIO, BytesIO
 from datetime import datetime
 
@@ -303,7 +304,8 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8')
-        user_level = request.form.get('user_level')
+        # Set user level to 'customer' by default
+        user_level = 'customer'
         user = User(fname=fname, lname=lname, username=username, email=email, password=password, user_level=user_level)
         db.session.add(user)
         db.session.commit()
@@ -328,7 +330,27 @@ from flask_login import current_user, login_required
 @login_required
 def dashboard():
     if current_user.user_level == 'admin':
-        return render_template('admin_dashboard.html')
+        total_users = User.query.count()  # Count total users
+        active_sessions = len(session)  # This is a basic approach. You may want to track sessions differently.
+        
+        # Example: If you store active users in the session, you might track like this:
+        active_sessions = session.get('active_users', 0)
+        
+        system_health = "Good"  # This can be determined by your own logic
+        cpu_core = psutil.cpu_count()
+        cpu_utilization = psutil.cpu_percent(interval=1)
+
+        if cpu_utilization > 80:
+            system_health = "Warning"
+        else:
+            system_health = "Good"
+
+        return render_template('admin_dashboard.html', 
+                            total_users=total_users, 
+                            active_sessions=active_sessions, 
+                            system_health=system_health,
+                            cpu_core=cpu_core,
+                            cpu_util=cpu_utilization)
     elif current_user.user_level == 'manager':
         return render_template('manager_dashboard.html')
     else:
@@ -338,6 +360,29 @@ def dashboard():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/admin/manage_users', methods=['GET', 'POST'])
+@login_required
+def manage_users():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home'))
+
+    users = User.query.all()
+
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        new_level = request.form.get('user_level')
+        
+        user = User.query.get(user_id)
+        if user:
+            user.user_level = new_level
+            db.session.commit()
+            flash(f"User {user.username}'s level updated to {new_level}.", 'success')
+        else:
+            flash("User not found.", 'error')
+
+    return render_template('manage_users.html', users=users)
 
 
 if __name__ == '__main__':
