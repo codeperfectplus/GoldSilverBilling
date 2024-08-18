@@ -25,37 +25,42 @@
                     <option value="24k">24k</option>
                 </select>
             </div>
-                 
             <div class="form-group">
-                <label for="price_per_gram">Price per gram (INR): <i class="fa-solid fa-weight-hanging"></i></label>
+                <label for="price_per_gram">Price per gram ({{ current_currency }}): <i class="fa-solid fa-weight-hanging"></i></label>
                 <input type="number" step="0.01" name="price_per_gram" id="price_per_gram" class="form-control" placeholder="Enter price per gram" value="{{ price_per_gram }}" required>
             </div>
             
-            <div class="form-group">
-                <label for="service_charge">Service Charge (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
-                <input type="number" step="0.01" name="service_charge" id="service_charge" class="form-control" placeholder="Enter service charge percentage" value="{{ service_charge }}" required>
-            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="service_charge">Making charges (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
+                    <input type="number" step="0.01" name="service_charge" id="service_charge" class="form-control" placeholder="Enter service charge percentage" value="{{ service_charge }}" required>
+                </div>
 
-            <div class="form-group">
-                <label for="tax">Tax (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
-                <input type="number" step="0.01" name="tax" id="tax" class="form-control" placeholder="Enter tax percentage" value="{{ tax }}" required>
+                <div class="form-group">
+                    <label for="tax">Tax (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
+                    <input type="number" step="0.01" name="tax" id="tax" class="form-control" placeholder="Enter tax percentage" value="{{ tax }}" required>
+                </div>
             </div>
             
-            <button type="submit" class="btn btn-hero btn-block mt-4">Generate Estimate Bill</button>
-            <a href="{{ url_for('history') }}" class="btn btn-hero mt-4">Previous History</a>
+            <button type="submit" class="btn btn-hero btn-block">Generate Estimate Bill</button>
+            {% if current_user.is_authenticated %}
+                {% if current_user.user_level == 'admin' %}
+                    <a href="{{ url_for('history') }}" class="btn btn-hero mt-2">Previous History</a>
+                {% endif %}
+            {% endif %}
         </form>
     </div>
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Jeweler Details</h2>
-        <img src="{{ url_for('static', filename=config['JEWELLER_LOGO']) }}" alt="Jeweler Logo" class="img-fluid" style="max-width: 200px;">
+        <img src="{{ url_for('static', filename=config['JEWELLER_LOGO']) }}" alt="Jeweler Logo" class="img-fluid">
         <p><strong>Name:</strong> {{ config["JEWELLER_NAME"] }}</p>
         <p><strong>Address:</strong> {{ config["JEWELLER_ADDRESS"] }}</p>
         <p><strong>Contact:</strong> {{ config["JEWELLER_CONTACT"] }}</p>
         <p><strong>Email:</strong> {{ config["JEWELLER_EMAIL"] }}</p>
         <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
         <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
-        <p><strong>Gold Rate (Per gm):</strong> ₹ {{ price_per_gram }}</p>
+        <p><strong>Gold Rate (Per gm):</strong> {{ currency_symbol }} {{ price_per_gram }}</p>
     </div>
 </div>
 {% endblock %}

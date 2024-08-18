@@ -65,6 +65,10 @@
     margin-bottom: 15px;
 }
 
+.admin-tools {
+    margin-top: 30px;
+}
+
 .admin-tools h3 {
     font-size: 1.8em;
     margin-bottom: 15px;
@@ -77,30 +81,38 @@
     margin-right: 10px;
 }
 
-.admin-tools ul {
-    list-style: none;
-    padding: 0;
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
-.admin-tools ul li {
-    margin-bottom: 10px;
-}
-
-.admin-tools ul li a {
-    text-decoration: none;
-    color: #007bff;
-    font-size: 1.2em;
-    transition: color 0.3s ease-in-out;
+.btn {
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 1.25em;
+    color: #fff;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.admin-tools ul li a i {
-    margin-right: 8px;
+.btn i {
+    margin-right: 10px;
 }
 
-.admin-tools ul li a:hover {
-    color: #0056b3;
+.btn:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn:active {
+    background: #004085;
 }
 
 .disabled-link {

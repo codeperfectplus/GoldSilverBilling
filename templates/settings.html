@@ -12,6 +12,10 @@
             <select name="currency" id="currency" class="form-control">
                 <option value="INR" {% if settings and settings.currency == 'INR' %}selected{% endif %}>INR</option>
                 <option value="USD" {% if settings and settings.currency == 'USD' %}selected{% endif %}>USD</option>
+                <option value="EUR" {% if settings and settings.currency == 'EUR' %}selected{% endif %}>EUR</option>
+                <option value="GBP" {% if settings and settings.currency == 'GBP' %}selected{% endif %}>GBP</option>
+                <option value="JPY" {% if settings and settings.currency == 'JPY' %}selected{% endif %}>JPY</option>
+                <option value="AUD" {% if settings and settings.currency == 'AUD' %}selected{% endif %}>AUD</option>
             </select>
         </div>
         <div class="form-group">

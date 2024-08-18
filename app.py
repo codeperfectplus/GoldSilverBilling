@@ -57,6 +57,7 @@ class GoldTransaction(db.Model):
     service_charge = db.Column(db.Float, nullable=False)
     tax = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -68,6 +69,7 @@ class SilverTransaction(db.Model):
     service_charge = db.Column(db.Float, nullable=False)
     tax = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -89,7 +91,6 @@ class Settings(db.Model):
     currency = db.Column(db.String(10), nullable=False)
     theme = db.Column(db.String(10), nullable=False)
 
-
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -105,6 +106,15 @@ class AuditLog(db.Model):
 # Create the database
 with app.app_context():
     db.create_all()
+
+
+# first commit in database for settings
+with app.app_context():
+    db.create_all()
+    settings = Settings(currency='INR', theme='light')
+    db.session.add(settings)
+    db.session.commit()
+
 
 @app.route('/health')
 def health():
@@ -133,9 +143,22 @@ def home() -> str:
 def inject_theme():
     return dict(current_theme=app.config.get('THEME', 'light'))
 
+
 # Gold calculator route
 @app.route('/gold-calculator', methods=['GET', 'POST'])
 def gold_calculator():
+
+    currency_to_symbol_dict = {
+        "INR" : "₹ ",
+        "USD" : "$ ",
+        "EUR" : "€ ",
+        "GBP" : "£ ",
+        "JPY" : "¥ ",
+        "AUD" : "A$ ",
+    }
+
+    current_currency = Settings.query.first().currency
+    currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
     if request.method == 'POST':
         try:
             weight = float(request.form['weight'])
@@ -160,17 +183,25 @@ def gold_calculator():
                 purity=purity,
                 service_charge=gold_service_charge,
                 tax=gold_tax,
-                total=bill_details['Final Price']
+                total=bill_details['Final Price'],
+                currency=current_currency,
             )
             db.session.add(transaction)
             db.session.commit()
 
+            # if user is logged in, log the transaction
+            if current_user.is_authenticated:
+                log_action(user_id=current_user.id, username=current_user.username,
+                           action='Gold Calculator', details=f"Calculated gold price for weight {weight} grams")
+                
             return render_template('gold_bill.html',
                                    bill=bill_details,
                                    weight=weight,
                                    price_per_gram=gold_price_per_gram,
                                    purity=purity,
-                                   config=app.config)
+                                   config=app.config,
+                                   current_currency=current_currency,
+                                   currency_symbol=currency_symbol)
         except ValueError as e:
             logging.error(f"ValueError in gold calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -185,7 +216,10 @@ def gold_calculator():
                            price_per_gram=gold_price_per_gram,
                            service_charge=gold_service_charge,
                            tax=gold_tax,
-                           config=app.config)
+                           config=app.config,
+                           current_currency=current_currency,
+                           currency_symbol=currency_symbol)
+                           
 
 # Silver calculator route
 @app.route('/silver-calculator', methods=['GET', 'POST'])
@@ -224,7 +258,7 @@ def silver_calculator():
             )
             db.session.add(transaction)
             db.session.commit()
-
+                
             return render_template('silver_bill.html',
                                    bill=bill_details,
                                    weight=weight,
@@ -257,20 +291,24 @@ def history():
     if selected_type == 'gold':
         transactions = GoldTransaction.query.all()
         transactions = [{'id': t.id, 'type': 'Gold', 'weight': t.weight, 'price_per_gram': t.price_per_gram, 
-                         "purity": t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'timestamp': t.timestamp} for t in transactions]
+                         "purity": t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'currency': t.currency,
+                         'timestamp': t.timestamp} for t in transactions]
     elif selected_type == 'silver':
         transactions = SilverTransaction.query.all()
         transactions = [{'id': t.id, 'type': 'Silver', 'weight': t.weight, 'price_per_gram': t.price_per_gram,
-                         'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'timestamp': t.timestamp} for t in transactions]
+                         'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'currency': t.currency,
+                         'timestamp': t.timestamp} for t in transactions]
     else:
         gold_transactions = GoldTransaction.query.all()
         silver_transactions = SilverTransaction.query.all()
 
         transactions = [{'id': t.id, 'type': 'Gold', 'weight': t.weight, 'price_per_gram': t.price_per_gram,
-                         'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'timestamp': t.timestamp} for t in gold_transactions]
+                         'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'currency': t.currency,
+                         'timestamp': t.timestamp} for t in gold_transactions]
 
         transactions += [{'id': t.id, 'type': 'Silver', 'weight': t.weight, 'price_per_gram': t.price_per_gram,
-                          'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'timestamp': t.timestamp} for t in silver_transactions]
+                          'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'currency': t.currency,
+                          'timestamp': t.timestamp} for t in silver_transactions]
 
     return render_template('history.html', transactions=transactions, selected_type=selected_type)
 
@@ -290,18 +328,22 @@ def download_csv():
     if selected_type == 'gold':
         transactions = GoldTransaction.query.all()
         for t in transactions:
-            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.currency,
+                             t.timestamp])
     elif selected_type == 'silver':
         transactions = SilverTransaction.query.all()
         for t in transactions:
-            writer.writerow([t.id, 'Silver', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Silver', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.currency,
+                             t.timestamp])
     else:
         gold_transactions = GoldTransaction.query.all()
         for t in gold_transactions:
-            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.currency,
+                             t.timestamp])
         silver_transactions = SilverTransaction.query.all()
         for t in silver_transactions:
-            writer.writerow([t.id, 'Silver', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Silver', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.currency,
+                             t.timestamp])
 
     output = si.getvalue().encode('utf-8')
     return send_file(
@@ -381,16 +423,18 @@ def dashboard():
         else:
             system_health = "Good"
 
+        audit_logs = AuditLog.query.filter_by(user_id=current_user.id).all()
         return render_template('admin_dashboard.html', 
                             total_users=total_users, 
                             active_sessions=active_sessions, 
                             system_health=system_health,
                             cpu_core=cpu_core,
-                            cpu_util=cpu_utilization)
-    elif current_user.user_level == 'manager':
-        return render_template('manager_dashboard.html')
-    else:
-        return render_template('customer_dashboard.html')
+                            cpu_util=cpu_utilization,
+                            audit_logs=audit_logs)
+    elif current_user.user_level == 'customer':
+        audit_logs = AuditLog.query.filter_by(user_id=current_user.id).all()
+        return render_template('customer_dashboard.html', audit_logs=audit_logs)
+ 
 
 @app.route("/logout")
 def logout():

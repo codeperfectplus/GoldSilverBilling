@@ -27,6 +27,7 @@
         <tr>
             <th>ID</th>
             <th>Type</th>
+            <th>Currency</th>
             <th>Weight (g)</th>
             <th>Price per Gram</th>
             <th>Purity</th>
@@ -39,6 +40,7 @@
         <tr>
             <td>{{ transaction.id }}</td>
             <td>{{ transaction.type }}</td>
+            <td>{{ transaction.currency }}</td>
             <td>{{ transaction.weight }}</td>
             <td>{{ transaction.price_per_gram }}</td>
             <td>{{ transaction.purity or 'N/A' }}</td>

@@ -5,17 +5,27 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
 {% block content %}
-<div class="hero mt-4">
+<div class="hero">
     <h1>Welcome to the Pricing Calculator</h1>
     <p>Select a calculator to get started.</p>
     <div class="hero-buttons">
-        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-coins"></i> Gold Calculator</a>
-        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero"><i class="fa-solid fa-gem"></i> Silver Calculator</a>
-        <a href="{{ url_for('features') }}" class="btn btn-hero"><i class="fa-solid fa-medal"></i> Features</a>
-        <a href="{{ url_for('pricing') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> Pricing</a>
+        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero">
+            <i class="fa-solid fa-coins fa-lg"></i> Gold Calculator
+        </a>
+        <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero">
+            <i class="fa-solid fa-gem fa-lg"></i> Silver Calculator
+        </a>
+        <a href="{{ url_for('features') }}" class="btn btn-hero">
+            <i class="fa-solid fa-medal fa-lg"></i> Features
+        </a>
+        <a href="{{ url_for('pricing') }}" class="btn btn-hero">
+            <i class="fa-solid fa-money-check-dollar fa-lg"></i> Pricing
+        </a>
         {% if current_user.is_authenticated %}
             {% if current_user.user_level == 'admin' %}
-                <a href="{{ url_for('history') }}" class="btn btn-hero"><i class="fa-solid fa-money-check-dollar"></i> History</a>
+                <a href="{{ url_for('history') }}" class="btn btn-hero">
+                    <i class="fa-solid fa-history fa-lg"></i> History
+                </a>
             {% endif %}
         {% endif %}
     </div>

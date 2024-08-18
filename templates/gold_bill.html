@@ -15,7 +15,7 @@
             </div>
             <div class="details">
                 <span><strong>Price per gram:</strong></span>
-                <span>₹{{ price_per_gram }}</span>
+                <span>{{ currency_symbol }}{{ price_per_gram }}</span>
             </div>
             <div class="details">
                 <span><strong>Gold Purity</strong></span>
@@ -23,19 +23,19 @@
             </div>
             <div class="details">
                 <span><strong>Base Price:</strong></span>
-                <span>₹{{ bill['Base Price'] | float }}</span>
+                <span>{{ currency_symbol }}{{ bill['Base Price'] | float }}</span>
             </div>
             <div class="details">
                 <span><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong></span>
-                <span>₹{{ bill['Service Charge'] | float }}</span>
+                <span>{{ currency_symbol }}{{ bill['Service Charge'] | float }}</span>
             </div>
             <div class="details">
                 <span><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong></span>
-                <span>₹{{ bill['Tax'] | float }}</span>
+                <span>{{ currency_symbol }}{{ bill['Tax'] | float }}</span>
             </div>
             <div class="details total">
                 <span><strong>Total Amount Payable:</strong></span>
-                <span>₹{{ bill['Final Price'] | float}}</span>
+                <span>{{ currency_symbol }}{{ bill['Final Price'] | float}}</span>
             </div>
             <p class="text-center mt-4">Final amount rounded to nearest integer</p>
             <p class="text-center mt-4">Thank you for your purchase!</p>
@@ -60,7 +60,7 @@
         <p><strong>Email:</strong> {{ config["JEWELLER_EMAIL"] }}</p>
         <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
         <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
-        <p><strong>Gold Rate(Per gm):</strong> ₹ {{ price_per_gram }} </p>
+        <p><strong>Gold Rate(Per gm):</strong> {{ currency_symbol }} {{ price_per_gram }} </p>
     </div>
 </div>
 {% endblock %}

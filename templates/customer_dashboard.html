@@ -12,18 +12,25 @@
     <h2 class="dashboard-title">Customer Dashboard</h2>
     <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
     
-    <div class="profile-summary">
-        <h3>Your Profile</h3>
-        <ul>
-            <li><strong>Name:</strong> {{ current_user.fname}} {{current_user.lname }}</li>
-            <li><strong>Email:</strong> {{ current_user.email }}</li>
-            <li><strong>Account Status:</strong> Active</li>
-        </ul>
-    </div>
+    <div class="dashboard-content">
+        <div class="profile-summary">
+            <h3><i class="fas fa-user-circle"></i> Your Profile</h3>
+            <ul>
+                <li><strong>Name:</strong> {{ current_user.fname }} {{ current_user.lname }}</li>
+                <li><strong>Email:</strong> {{ current_user.email }}</li>
+                <li><strong>Account Status:</strong> Active</li>
+            </ul>
+        </div>
 
-    <div class="recent-activity">
-        <h3>Recent Activity</h3>
-        <p>No recent activities.</p>
+        <div class="recent-activity">
+            <h3><i class="fas fa-history"></i> Recent Activity</h3>
+            # audit logs
+            {% for log in audit_logs %}
+            <p>{{ log.timestamp }} - {{ log.action }}</p>
+            <p> {{ log.details }}</p>
+            <hr>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

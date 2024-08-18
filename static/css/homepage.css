@@ -1,104 +1,111 @@
 body {
     background-color: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-top: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .hero {
-    background: linear-gradient(135deg, #81a0f3, #1a466d);
-    color: #fff;
     text-align: center;
-    padding: 100px 20px;
-    border-radius: 15px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    padding: 4rem 2rem;
+    background: #ffffff;
+    border-bottom: 2px solid #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
 }
 
 .hero h1 {
     font-size: 3rem;
-    margin-bottom: 20px;
-    animation: fadeInDown 1s ease-in-out;
-    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .hero p {
-    font-size: 1.5rem;
-    margin-bottom: 40px;
-    animation: fadeInUp 1s ease-in-out;
+    font-size: 1.25rem;
+    color: #666;
+    margin-bottom: 2rem;
 }
 
 .hero-buttons {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    animation: fadeIn 2s ease-in-out;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .btn-hero {
-    background-color: #fff;
-    color: #1a466d;
-    padding: 15px 30px;
-    font-size: 1.25rem;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    color: #ffffff;
+    background: #007bff;
+    border: none;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .btn-hero i {
-    margin-right: 10px;
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
 }
 
 .btn-hero:hover {
-    background-color: #1a466d;
-    color: #fff;
-    transform: scale(1.1);
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn-hero:active {
+    background: #004085;
 }
 
 .card-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 50px;
+    gap: 1.5rem;
+    margin-top: 3rem;
 }
 
 .card {
-    flex: 1;
-    max-width: 300px;
-    padding: 20px;
-    border: 1px solid #007bff;
-    border-radius: 10px;
+    max-width: 320px;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
     background-color: #ffffff;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card h2 {
     color: #007bff;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
 .card p {
-    margin-bottom: 20px;
     color: #555;
+    margin-bottom: 1.5rem;
 }
 
 .btn-custom {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
     text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    transition: background-color 0.3s;
 }
 
 .btn-custom:hover {
@@ -107,15 +114,15 @@ body {
 
 @media (max-width: 768px) {
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     .hero p {
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
 
     .btn-hero {
-        padding: 10px 20px;
+        padding: 0.75rem 1.25rem;
         font-size: 1rem;
     }
 }
