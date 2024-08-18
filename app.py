@@ -233,7 +233,7 @@ def download_csv():
     if selected_type == 'gold':
         transactions = GoldTransaction.query.all()
         for t in transactions:
-            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, 'N/A', t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
     elif selected_type == 'silver':
         transactions = SilverTransaction.query.all()
         for t in transactions:
@@ -241,7 +241,7 @@ def download_csv():
     else:
         gold_transactions = GoldTransaction.query.all()
         for t in gold_transactions:
-            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, 'N/A', t.service_charge, t.tax, t.total, t.timestamp])
+            writer.writerow([t.id, 'Gold', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
         silver_transactions = SilverTransaction.query.all()
         for t in silver_transactions:
             writer.writerow([t.id, 'Silver', t.weight, t.price_per_gram, t.purity, t.service_charge, t.tax, t.total, t.timestamp])
@@ -251,7 +251,7 @@ def download_csv():
         BytesIO(output),
         mimetype='text/csv',
         as_attachment=True,
-        attachment_filename='transactions.csv'
+        download_name='transactions.csv'
     )
 
 # Additional routes

@@ -8,7 +8,10 @@ Our mission is to simplify the process of calculating gold prices for jewellers 
 
 ## Demo
 
-- Demo is live on the [Render](https://goldsilverbilling.onrender.com/)
+Demo is live on the the belows servers.
+
+- [Render(Server 1)](https://goldsilverbilling.onrender.com/)
+- [Railway(Server 2)](https://goldsilverbilling-production.up.railway.app/)
 
 ## Building and Running the Docker Container
 
@@ -21,7 +24,7 @@ docker build -t goldsilverbilling .
 2. **Run the Docker container:**
 
 ```bash
-sudo docker run -p 5000:5000 goldsilverbilling
+docker run -p 5000:5000 goldsilverbilling
 ```
 
 
