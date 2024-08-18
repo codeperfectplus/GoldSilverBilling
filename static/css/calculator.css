@@ -1,5 +1,5 @@
 body {
-    background-color: #eef2f5;
+    background-color: #f0f2f5;
     font-family: 'Arial', sans-serif;
     color: #333;
     margin: 0;
@@ -20,6 +20,7 @@ body {
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
 }
 
 .sidebar {
@@ -29,6 +30,7 @@ body {
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #00aaff;
+    animation: fadeIn 1s ease-in-out;
 }
 
 h1 {
@@ -54,18 +56,22 @@ p.text-center {
     color: #007bff;
     margin-bottom: 8px;
     display: block;
+    font-size: 1.1rem;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     border-radius: 8px;
     border: 1px solid #ced4da;
     padding: 10px;
     font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
     border-color: #00aaff;
     outline: none;
     box-shadow: 0 0 8px rgba(0, 170, 255, 0.3);
@@ -91,18 +97,7 @@ p.text-center {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
+@keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -116,14 +111,15 @@ p.text-center {
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
+        padding: 0 10px;
     }
 
-    .hero h1 {
-        font-size: 2rem;
+    .main-content {
+        margin-bottom: 20px;
     }
 
-    .hero p {
-        font-size: 1rem;
+    h1 {
+        font-size: 1.75rem;
     }
 
     .btn-hero {
@@ -143,24 +139,4 @@ p.text-center {
     margin-bottom: 10px;
     color: #333;
     font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        padding: 0 10px;
-    }
-
-    .main-content {
-        margin-bottom: 20px;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-    }
-
-    .btn-custom {
-        font-size: 1rem;
-        padding: 12px 15px;
-    }
 }

@@ -93,6 +93,7 @@ class Settings(db.Model):
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(20), nullable=False)
     action = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     details = db.Column(db.Text, nullable=True)
@@ -351,7 +352,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
-            log_action(user.id, 'Login')
+            log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
             return redirect(url_for('dashboard'))
     return render_template('login.html')
 
@@ -391,7 +392,6 @@ def dashboard():
 @app.route("/logout")
 def logout():
     logout_user()
-    log_action(current_user.id, 'Logout')
     return redirect(url_for('login'))
 
 
@@ -441,15 +441,15 @@ def settings():
         db.session.add(settings)
         db.session.commit()
         flash('Settings updated successfully!', 'success')
-        log_action(current_user.id, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
+        log_action(current_user.id, current_user.username, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
         return redirect(url_for('settings'))
     
     settings = Settings.query.first()
     return render_template('settings.html', settings=settings)
 
 
-def log_action(user_id, action, details=None):
-    log_entry = AuditLog(user_id=user_id, action=action, details=details)
+def log_action(user_id, username, action, details=None):
+    log_entry = AuditLog(user_id=user_id, username=username, action=action, details=details)
     db.session.add(log_entry)
     db.session.commit()
 

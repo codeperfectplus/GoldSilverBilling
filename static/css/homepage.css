@@ -1,5 +1,5 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #f0f2f5;
 }
 
 .hero {
@@ -10,12 +10,14 @@ body {
     border-radius: 15px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 20px;
     animation: fadeInDown 1s ease-in-out;
+    font-weight: bold;
 }
 
 .hero p {
@@ -29,54 +31,30 @@ body {
     justify-content: center;
     gap: 20px;
     animation: fadeIn 2s ease-in-out;
+    flex-wrap: wrap;
 }
 
 .btn-hero {
     background-color: #fff;
-    color: #ff7e5f;
+    color: #1a466d;
     padding: 15px 30px;
     font-size: 1.25rem;
     border-radius: 50px;
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-hero i {
+    margin-right: 10px;
 }
 
 .btn-hero:hover {
-    background-color: #ff5f5f;
+    background-color: #1a466d;
     color: #fff;
     transform: scale(1.1);
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .card-container {
@@ -110,6 +88,7 @@ body {
 
 .card p {
     margin-bottom: 20px;
+    color: #555;
 }
 
 .btn-custom {
@@ -119,6 +98,7 @@ body {
     border-radius: 5px;
     text-decoration: none;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-custom:hover {

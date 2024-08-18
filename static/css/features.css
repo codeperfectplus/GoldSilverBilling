@@ -12,19 +12,30 @@ h1 {
     margin-bottom: 30px;
 }
 
-.feature {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #007bff;
-    border-radius: 10px;
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.feature h2 {
+.feature-card {
+    margin: 15px;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.feature-card:hover {
+    transform: scale(1.05);
+}
+
+.card-title {
     color: #007bff;
+    font-weight: bold;
 }
 
 .icon {
-    font-size: 50px;
+    font-size: 24px;
+    margin-right: 10px;
     color: #007bff;
 }

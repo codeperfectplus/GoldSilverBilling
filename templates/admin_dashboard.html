@@ -5,43 +5,49 @@
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="admin-dashboard">
-    <h2 class="dashboard-title">Admin Dashboard</h2>
+    <h2 class="dashboard-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
     <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
     
     <div class="stats-cards">
         <div class="card">
+            <i class="fas fa-users card-icon"></i>
             <h3>Total Users</h3>
-            <p>{{ total_users }}</p>  <!-- Display dynamic user count -->
+            <p>{{ total_users }}</p>
         </div>
         <div class="card">
+            <i class="fas fa-network-wired card-icon"></i>
             <h3>Sessions</h3>
-            <p>{{ active_sessions }}</p>  <!-- Display dynamic active sessions -->
+            <p>{{ active_sessions }}</p>
         </div>
         <div class="card">
+            <i class="fas fa-heartbeat card-icon"></i>
             <h3>Health</h3>
-            <p>{{ system_health }}</p>  <!-- Display dynamic system health -->
+            <p>{{ system_health }}</p>
         </div>
         <div class="card">
-            <h3>Cpu Core</h3>
-            <p>{{ cpu_core }}</p>  <!-- Display dynamic system health -->
+            <i class="fas fa-microchip card-icon"></i>
+            <h3>CPU Core</h3>
+            <p>{{ cpu_core }}</p>
         </div>
         <div class="card">
-            <h3>Cpu Utilization</h3>
-            <p>{{ cpu_util }}</p>  <!-- Display dynamic system health -->
+            <i class="fas fa-tachometer-alt card-icon"></i>
+            <h3>CPU Utilization</h3>
+            <p>{{ cpu_util }}</p>
         </div>
     </div>
 
     <div class="admin-tools">
-        <h3>Admin Tools</h3>
+        <h3><i class="fas fa-tools"></i> Admin Tools</h3>
         <ul>
-            <li><a href="{{ url_for('manage_users') }}">User Management</a></li>
-            <li><a href="{{ url_for('history') }}">History</a></li>
-            <li><a href="{{ url_for('settings') }}">System Settings</a></li>
-            <li><a href="{{ url_for('audit_log') }}">Audit Logs</a></li>
+            <li><a href="{{ url_for('manage_users') }}"><i class="fas fa-user-cog"></i> User Management</a></li>
+            <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i> System Settings</a></li>
+            <li><a href="{{ url_for('audit_log') }}"><i class="fas fa-clipboard-list"></i> Audit Logs</a></li>
         </ul>
     </div>
 </div>
