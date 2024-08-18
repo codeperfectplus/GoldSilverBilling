@@ -336,8 +336,11 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8')
-        # Set user level to 'customer' by default
-        user_level = 'customer'
+        # Check if this is the first user
+        if User.query.count() == 0:
+            user_level = 'admin'  # Make the first user an admin
+        else:
+            user_level = 'customer'  # Default to 'customer' for all other users
         user = User(fname=fname, lname=lname, username=username, email=email, password=password, user_level=user_level)
         db.session.add(user)
         db.session.commit()
