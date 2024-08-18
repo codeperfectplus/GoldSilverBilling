@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% block title %} Health {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/health.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Health Check</h1>
+        <p>Status: {{ status }}</p>
+        <p>Message: {{ message }}</p>
+        <p>Version: {{ version }}</p>
+        <p>Timestamp: {{ timestamp }}</p>
+    </div>
+{% endblock %}

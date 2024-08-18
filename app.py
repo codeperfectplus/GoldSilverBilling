@@ -10,8 +10,6 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin
-from flask_login import current_user, login_required
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from calcualtors import GoldCalculator, SilverCalculator
 
@@ -49,6 +47,8 @@ def load_config() -> dict:
 app.config.update(load_config())
 
 # Define the database models
+
+
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     weight = db.Column(db.Float, nullable=False)
@@ -59,6 +59,7 @@ class GoldTransaction(db.Model):
     total = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 class SilverTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     weight = db.Column(db.Float, nullable=False)
@@ -68,6 +69,7 @@ class SilverTransaction(db.Model):
     tax = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,24 +84,54 @@ class User(db.Model, UserMixin):
         return f"User('{self.username}', '{self.email}', '{self.user_level}')"
 
 
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    currency = db.Column(db.String(10), nullable=False)
+    theme = db.Column(db.String(10), nullable=False)
+
+
+class AuditLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(20), nullable=False)
+    action = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    details = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return f"AuditLog('{self.user_id}', '{self.action}', '{self.timestamp}')"
+
+
 # Create the database
 with app.app_context():
     db.create_all()
 
-# Health check endpoint
-@app.route('/health', methods=['GET'])
-def health() -> jsonify:
-    return jsonify({
+@app.route('/health')
+def health():
+    health_info = {
         "status": "healthy",
         "message": "The server is up and running.",
         "version": "1.0.0",
         "timestamp": datetime.now().isoformat()
-    })
+    }
+    return render_template('health.html', **health_info)
+
+@app.route('/permission-denied')
+def permission_denied():
+    return render_template('permission_denied.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 # Home route
 @app.route('/')
 def home() -> str:
     return render_template('homepage.html')
+
+@app.context_processor
+def inject_theme():
+    return dict(current_theme=app.config.get('THEME', 'light'))
 
 # Gold calculator route
 @app.route('/gold-calculator', methods=['GET', 'POST'])
@@ -219,7 +251,7 @@ def silver_calculator():
 @login_required
 def history():
     if current_user.user_level != 'admin':
-        return redirect(url_for('home')) 
+        return redirect(url_for('permission_denied'))
     selected_type = request.args.get('type', 'all')
 
     if selected_type == 'gold':
@@ -320,6 +352,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
+            log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
             return redirect(url_for('dashboard'))
     return render_template('login.html')
 
@@ -366,7 +399,7 @@ def logout():
 @login_required
 def manage_users():
     if current_user.user_level != 'admin':
-        return redirect(url_for('home'))
+        return redirect(url_for('permission_denied'))
 
     users = User.query.all()
 
@@ -383,6 +416,52 @@ def manage_users():
             flash("User not found.", 'error')
 
     return render_template('manage_users.html', users=users)
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        currency = request.form.get('currency')
+        theme = request.form.get('theme')
+
+        # Save the settings (you might save them to a database or a config file)
+        # Assuming you have a Settings model or similar logic to save settings
+        settings = Settings.query.first()
+        if not settings:
+            settings = Settings(currency=currency, theme=theme)
+        else:
+            settings.currency = currency
+            settings.theme = theme
+
+        flash(f'Settings updated successfully. Currency set to {currency}. Theme set to {theme}.', 'success')
+        
+        db.session.add(settings)
+        db.session.commit()
+        flash('Settings updated successfully!', 'success')
+        log_action(current_user.id, current_user.username, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
+        return redirect(url_for('settings'))
+    
+    settings = Settings.query.first()
+    return render_template('settings.html', settings=settings)
+
+
+def log_action(user_id, username, action, details=None):
+    log_entry = AuditLog(user_id=user_id, username=username, action=action, details=details)
+    db.session.add(log_entry)
+    db.session.commit()
+
+
+@app.route('/admin/audit_log')
+@login_required
+def audit_log():
+    if current_user.user_level != 'admin':
+        return redirect(url_for('home'))
+
+    logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).all()
+    return render_template('audit_log.html', logs=logs)
 
 
 if __name__ == '__main__':
