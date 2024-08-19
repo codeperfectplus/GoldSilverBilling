@@ -24,7 +24,6 @@
 
         <div class="recent-activity">
             <h3><i class="fas fa-history"></i> Recent Activity</h3>
-            # audit logs
             {% for log in audit_logs %}
             <p>{{ log.timestamp }} - {{ log.action }}</p>
             <p> {{ log.details }}</p>

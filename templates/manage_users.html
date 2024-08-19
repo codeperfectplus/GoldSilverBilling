@@ -27,7 +27,6 @@
                     <input type="hidden" name="user_id" value="{{ user.id }}">
                     <select name="user_level">
                         <option value="customer" {% if user.user_level == 'customer' %}selected{% endif %}>Customer</option>
-                        <option value="manager" {% if user.user_level == 'manager' %}selected{% endif %}>Manager</option>
                         <option value="admin" {% if user.user_level == 'admin' %}selected{% endif %}>Admin</option>
                     </select>
                     <button type="submit">Update</button>
