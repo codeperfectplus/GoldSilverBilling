@@ -2,44 +2,51 @@
 
 ![Homepage](/images/app.png)
 
-## Our Mission
+## Mission
 
-Our mission is to simplify the process of calculating gold prices for jewellers and customers alike. We aim to provide a user-friendly tool that allows for accurate and efficient calculations, ensuring transparency and trust in every transaction.
+Our goal is to simplify the process of calculating gold prices for jewelers and customers alike. We aim to provide a user-friendly, accurate, and efficient tool for gold price calculations. By ensuring transparency and trust in every transaction, we help users make informed decisions and streamline their billing processes.
 
 ## Features
 
-- Real-time Price Calculation
-- Transaction History
-- Multi Level Authentication
-- User-friendly Interface
-- Customizable Charges
-- Responsive Design
-- Secure Data Handling
-- Business Customization
+- **Real-time Price Calculation:** Provides immediate and accurate estimates for gold prices based on user inputs.
+- **Transaction History:** Maintains a detailed log of all transactions for easy tracking and reference.
+- **Multi-Level Authentication:** Implements secure login with distinct roles for different user types (e.g., admin, manager, customer).
+- **User-Friendly Interface:** Designed with an intuitive layout for easy navigation and use.
+- **Customizable Charges:** Allows users to adjust service charges, taxes, and other fees according to their needs.
+- **Responsive Design:** Ensures the application is fully functional on various devices, including desktops, tablets, and smartphones.
+- **Secure Data Handling:** Protects sensitive information with robust security measures.
+- **Business Customization:** Provides options for tailoring the application to specific business requirements, including currency settings and theme preferences.
 
 ## Demo
 
-Demo is live on the the belows servers.
+Explore the live demo of the application on the following platforms:
 
-- [Railway(Server 2)](https://goldsilverbilling-production.up.railway.app/)
-- [Render(Server 1)](https://goldsilverbilling.onrender.com/)
+- [Railway (Server 1)](https://goldsilverbilling-production.up.railway.app/)
+- [Render (Server 2)](https://goldsilverbilling.onrender.com/)
 
 ## Building and Running the Docker Container
 
-1. **Build the Docker image:**
+To get the application up and running using Docker, follow these steps:
 
-```bash
-docker build -t goldsilverbilling .
-```
+1. **Build the Docker Image:**
 
-2. **Run the Docker container:**
+    ```bash
+    docker build -t goldsilverbilling .
+    ```
 
-```bash
-docker run -p 5000:5000 goldsilverbilling
-```
+    This command creates a Docker image named `goldsilverbilling` based on the Dockerfile in the project directory.
 
+2. **Run the Docker Container:**
 
-## Product Screenshots
+    ```bash
+    docker run -p 5000:5000 goldsilverbilling
+    ```
+
+    This command runs a container from the `goldsilverbilling` image and maps port 5000 of the container to port 5000 on your host machine.
+
+## Screenshots
+
+Here are some screenshots of the application:
 
 ### Homepage
 
@@ -56,24 +63,25 @@ docker run -p 5000:5000 goldsilverbilling
 ### System Settings
 
 ![System Settings](/images/system_setting.png)
-   
+
 ### Transaction History
 
 ![Transaction History](/images/transaction_history.png)
 
-## Improvements
+## Planned Improvements
 
-| Improvement            | Type                  | Details                                                                                   | Implemented |
-|------------------------|-----------------------|-------------------------------------------------------------------------------------------|--------------|
-| User Authentication    | Security              | Add a login system to secure sensitive data.                                              | &#x2611;           |
-| Data Persistence       | Functionality         | Store historical data for future reference.                                               | &#x2611;           |
-| Multi-Currency Support | Functionality         | Allow conversions for different currencies.                                               | &#x2611;           |
-| Responsive Design      | User Experience       | Enhance mobile usability by optimizing the layout and design for smaller screens.         | &#x2611;           |
-| Error Handling         | Functionality         | Implement robust validation and error messages for user inputs to improve user experience. |&#x2611;           |
-| API Integration        | Integration           | Fetch real-time gold/silver prices from external APIs.                                    | :x:           |
-| Advanced Analytics     | Functionality         | Provide reports or graphs based on past transactions for better insights.                 | :x:           |
-| Multi-Language Support | User Experience       | Cater to a broader audience by including multiple languages for the user interface.       | :x:           |
+We are continually working on enhancing the application. Here are some planned improvements:
 
+| Improvement            | Type                  | Details                                                                                   | Status |
+|------------------------|-----------------------|-------------------------------------------------------------------------------------------|--------|
+| **User Authentication**    | Security              | Implement a robust login system to secure sensitive data and restrict access based on user roles.       | ✅ |
+| **Data Persistence**       | Functionality         | Ensure historical data is stored and easily retrievable for future reference.                            | ✅ |
+| **Multi-Currency Support** | Functionality         | Introduce support for multiple currencies to allow users to perform conversions and calculations in different currencies. | ✅ |
+| **Responsive Design**      | User Experience       | Enhance the design and layout for improved usability on mobile and tablet devices.                     | ✅ |
+| **Error Handling**         | Functionality         | Implement comprehensive validation and error messaging to improve user experience and data integrity.    | ✅ |
+| **API Integration**        | Integration           | Integrate external APIs to fetch real-time gold and silver prices.                                           | :x:    |
+| **Advanced Analytics**     | Functionality         | Develop features to generate detailed reports and visualizations based on transaction data.                | :x:    |
+| **Multi-Language Support** | User Experience       | Add support for multiple languages to cater to a wider audience and enhance accessibility.                | :x:    |
 
 ## Author
 
@@ -85,15 +93,17 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- [Font Awesome](https://fontawesome.com/)
-- [Bootstrap](https://getbootstrap.com/)
-- [Python](https://www.python.org/)
-- [Flask](https://flask.palletsprojects.com/)
-- [Render](https://render.com/)
-- [Railway](https://railway.app/)
+We'd like to acknowledge the following tools and libraries that have been instrumental in developing this project:
+
+- [Python](https://www.python.org/) - The programming language used for the backend.
+- [Flask](https://flask.palletsprojects.com/) - The web framework used for building the application.
+- [Font Awesome](https://fontawesome.com/) - For icons and graphical elements.
+- [Bootstrap](https://getbootstrap.com/) - For responsive design and styling.
+- [Render](https://render.com/) - For hosting the application on the web.
+- [Railway](https://railway.app/) - For additional hosting services.
 
 ## Contact
 
-For any queries or feedback, please feel free to reach out to us at [codeperfectplus@gmail.com](mailto:codeperfectplus@gmail.com).
+For any questions, feedback, or suggestions, please reach out to us at [codeperfectplus@gmail.com](mailto:codeperfectplus@gmail.com).
 
 ---
