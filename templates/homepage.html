@@ -21,13 +21,6 @@
         <a href="{{ url_for('pricing') }}" class="btn btn-hero">
             <i class="fa-solid fa-money-check-dollar fa-lg"></i> Pricing
         </a>
-        {% if current_user.is_authenticated %}
-            {% if current_user.user_level == 'admin' %}
-                <a href="{{ url_for('history') }}" class="btn btn-hero">
-                    <i class="fa-solid fa-history fa-lg"></i> History
-                </a>
-            {% endif %}
-        {% endif %}
     </div>
 </div>
 {% endblock %}

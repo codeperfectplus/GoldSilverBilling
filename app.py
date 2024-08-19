@@ -46,7 +46,14 @@ def load_config() -> dict:
 
 app.config.update(load_config())
 
-# Define the database models
+currency_to_symbol_dict = {
+        "INR" : "₹",
+        "USD" : "$ ",
+        "EUR" : "€ ",
+        "GBP" : "£ ",
+        "JPY" : "¥ ",
+        "AUD" : "A$ ",
+    }
 
 
 class GoldTransaction(db.Model):
@@ -147,16 +154,6 @@ def inject_theme():
 # Gold calculator route
 @app.route('/gold-calculator', methods=['GET', 'POST'])
 def gold_calculator():
-
-    currency_to_symbol_dict = {
-        "INR" : "₹ ",
-        "USD" : "$ ",
-        "EUR" : "€ ",
-        "GBP" : "£ ",
-        "JPY" : "¥ ",
-        "AUD" : "A$ ",
-    }
-
     current_currency = Settings.query.first().currency
     currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
     if request.method == 'POST':
@@ -224,6 +221,8 @@ def gold_calculator():
 # Silver calculator route
 @app.route('/silver-calculator', methods=['GET', 'POST'])
 def silver_calculator():
+    current_currency = Settings.query.first().currency
+    currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
     if request.method == 'POST':
         try:
             weight = float(request.form['weight'])
@@ -264,7 +263,9 @@ def silver_calculator():
                                    weight=weight,
                                    price_per_gram=silver_price_per_gram,
                                    purity=silver_purity,
-                                   config=app.config)
+                                   config=app.config,
+                                   current_currency=current_currency,
+                                   currency_symbol=currency_symbol)
         except ValueError as e:
             logging.error(f"ValueError in silver calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -279,7 +280,9 @@ def silver_calculator():
                            price_per_gram=silver_price_per_gram,
                            service_charge=silver_service_charge,
                            tax=silver_tax,
-                           config=app.config)
+                           config=app.config,
+                           current_currency=current_currency,
+                           currency_symbol=currency_symbol)
 
 @app.route('/history', methods=['GET'])
 @login_required
