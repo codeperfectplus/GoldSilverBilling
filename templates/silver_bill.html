@@ -51,16 +51,6 @@
         </div>
     </div>
     <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Jeweler Details</h2>
-        <img src="{{ url_for('static', filename=config['JEWELLER_LOGO']) }}" alt="Jeweler Logo" class="img-fluid" style="max-width: 200px;">
-        <p><strong>Name:</strong> {{ config["JEWELLER_NAME"] }}</p>
-        <p><strong>Address:</strong> {{ config["JEWELLER_ADDRESS"] }}</p>
-        <p><strong>Contact:</strong> {{ config["JEWELLER_CONTACT"] }}</p>
-        <p><strong>Email:</strong> {{ config["JEWELLER_EMAIL"] }}</p>
-        <p><strong>Website:</strong> {{ config["JEWELLER_WEBSITE"] }}</p>
-        <p><strong>GSTIN:</strong> {{ config["JEWELLER_GSTIN"] }}</p>
-        <p><strong>Silver Rate (Per gm):</strong> ₹ {{ price_per_gram }} </p>
-    </div>
+    {% include 'ext/sidebar_jweller.html' %}
 </div>
 {% endblock %}

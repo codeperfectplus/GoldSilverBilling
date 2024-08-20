@@ -97,6 +97,10 @@ class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(10), nullable=False)
     theme = db.Column(db.String(10), nullable=False)
+    language = db.Column(db.String(15), nullable=False)
+    is_gold_jewellers_sidebar = db.Column(db.Boolean, default=False)
+    is_gold_calculator_enabled = db.Column(db.Boolean, default=False)
+    is_silver_calculator_enabled = db.Column(db.Boolean, default=False)
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -118,7 +122,9 @@ with app.app_context():
 # first commit in database for settings
 with app.app_context():
     db.create_all()
-    settings = Settings(currency='INR', theme='light')
+    settings = Settings(currency='INR', theme='light', language='en',
+                        is_gold_jewellers_sidebar=False,
+                        is_gold_calculator_enabled=False, is_silver_calculator_enabled=False)
     db.session.add(settings)
     db.session.commit()
 
@@ -144,7 +150,10 @@ def page_not_found(e):
 # Home route
 @app.route('/')
 def home() -> str:
-    return render_template('homepage.html')
+    is_gold_calculator_enabled = Settings.query.first().is_gold_calculator_enabled
+    is_silver_calculator_enabled = Settings.query.first().is_silver_calculator_enabled
+    return render_template('homepage.html', is_gold_calculator_enabled=is_gold_calculator_enabled, 
+                           is_silver_calculator_enabled=is_silver_calculator_enabled)
 
 @app.context_processor
 def inject_theme():
@@ -155,7 +164,11 @@ def inject_theme():
 @app.route('/gold-calculator', methods=['GET', 'POST'])
 def gold_calculator():
     current_currency = Settings.query.first().currency
+    is_gold_jewellers_sidebar = Settings.query.first().is_gold_jewellers_sidebar
     currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
+    is_gold_calculator_enabled = Settings.query.first().is_gold_calculator_enabled
+    if not is_gold_calculator_enabled:
+        return redirect(url_for('permission_denied'))
     if request.method == 'POST':
         try:
             weight = float(request.form['weight'])
@@ -198,7 +211,8 @@ def gold_calculator():
                                    purity=purity,
                                    config=app.config,
                                    current_currency=current_currency,
-                                   currency_symbol=currency_symbol)
+                                   currency_symbol=currency_symbol,
+                                   is_gold_jewellers_sidebar=is_gold_jewellers_sidebar)
         except ValueError as e:
             logging.error(f"ValueError in gold calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -215,7 +229,8 @@ def gold_calculator():
                            tax=gold_tax,
                            config=app.config,
                            current_currency=current_currency,
-                           currency_symbol=currency_symbol)
+                           currency_symbol=currency_symbol,
+                           is_gold_jewellers_sidebar=is_gold_jewellers_sidebar)
                            
 
 # Silver calculator route
@@ -223,6 +238,9 @@ def gold_calculator():
 def silver_calculator():
     current_currency = Settings.query.first().currency
     currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
+    is_silver_calculator_enabled = Settings.query.first().is_silver_calculator_enabled
+    if not is_silver_calculator_enabled:
+        return redirect(url_for('permission_denied'))
     if request.method == 'POST':
         try:
             weight = float(request.form['weight'])
@@ -476,21 +494,30 @@ def settings():
     if request.method == 'POST':
         currency = request.form.get('currency')
         theme = request.form.get('theme')
+        language = request.form.get('language')
+        is_gold_jewellers_sidebar = int(request.form.get('is_gold_jewellers_sidebar'))
+        is_gold_calculator_enabled = int(request.form.get('is_gold_calculator_enabled'))
+        is_silver_calculator_enabled = int(request.form.get('is_silver_calculator_enabled'))
 
         # Save the settings (you might save them to a database or a config file)
         # Assuming you have a Settings model or similar logic to save settings
         settings = Settings.query.first()
         if not settings:
-            settings = Settings(currency=currency, theme=theme)
+            settings = Settings(currency=currency, theme=theme, language=language,
+                                is_gold_jewellers_sidebar=is_gold_jewellers_sidebar,
+                                is_gold_calculator_enabled=is_gold_calculator_enabled,
+                                is_silver_calculator_enabled=is_silver_calculator_enabled)
         else:
             settings.currency = currency
             settings.theme = theme
+            settings.language = language
+            settings.is_gold_jewellers_sidebar = is_gold_jewellers_sidebar
+            settings.is_gold_calculator_enabled = is_gold_calculator_enabled
+            settings.is_silver_calculator_enabled = is_silver_calculator_enabled
 
-        flash(f'Settings updated successfully. Currency set to {currency}. Theme set to {theme}.', 'success')
-        
         db.session.add(settings)
         db.session.commit()
-        flash('Settings updated successfully!', 'success')
+        
         log_action(current_user.id, current_user.username, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
         return redirect(url_for('settings'))
     

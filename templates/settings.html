@@ -7,23 +7,73 @@
 <div class="container">
     <h1>System Settings</h1>
     <form method="POST" action="{{ url_for('settings') }}">
-        <div class="form-group">
-            <label for="currency">Currency</label>
-            <select name="currency" id="currency" class="form-control">
-                <option value="INR" {% if settings and settings.currency == 'INR' %}selected{% endif %}>INR</option>
-                <option value="USD" {% if settings and settings.currency == 'USD' %}selected{% endif %}>USD</option>
-                <option value="EUR" {% if settings and settings.currency == 'EUR' %}selected{% endif %}>EUR</option>
-                <option value="GBP" {% if settings and settings.currency == 'GBP' %}selected{% endif %}>GBP</option>
-                <option value="JPY" {% if settings and settings.currency == 'JPY' %}selected{% endif %}>JPY</option>
-                <option value="AUD" {% if settings and settings.currency == 'AUD' %}selected{% endif %}>AUD</option>
-            </select>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+                    <select name="currency" id="currency" class="form-control">
+                        <option value="INR" {% if settings and settings.currency == 'INR' %}selected{% endif %}>INR</option>
+                        <option value="USD" {% if settings and settings.currency == 'USD' %}selected{% endif %}>USD</option>
+                        <option value="EUR" {% if settings and settings.currency == 'EUR' %}selected{% endif %}>EUR</option>
+                        <option value="GBP" {% if settings and settings.currency == 'GBP' %}selected{% endif %}>GBP</option>
+                        <option value="JPY" {% if settings and settings.currency == 'JPY' %}selected{% endif %}>JPY</option>
+                        <option value="AUD" {% if settings and settings.currency == 'AUD' %}selected{% endif %}>AUD</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="theme">Theme(pending)</label>
+                    <select id="theme" name="theme" class="form-control">
+                        <option value="light" {% if settings and settings.theme == 'light' %}selected{% endif %}>Light</option>
+                        <option value="dark" {% if settings and settings.theme == 'dark' %}selected{% endif %}>Dark</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="theme">Theme</label>
-            <select id="theme" name="theme" class="form-control">
-                <option value="light" {% if settings and settings.theme == 'light' %}selected{% endif %}>Light</option>
-                <option value="dark" {% if settings and settings.theme == 'dark' %}selected{% endif %}>Dark</option>
-            </select>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="language">Language(pending)</label>
+                    <select id="language" name="language" class="form-control">
+                        <option value="en" {% if settings and settings.language == 'en' %}selected{% endif %}>English</option>
+                        <option value="es" {% if settings and settings.language == 'es' %}selected{% endif %}>Spanish</option>
+                        <option value="fr" {% if settings and settings.language == 'fr' %}selected{% endif %}>French</option>
+                        <option value="de" {% if settings and settings.language == 'de' %}selected{% endif %}>German</option>
+                        <option value="it" {% if settings and settings.language == 'it' %}selected{% endif %}>Italian</option>
+                        <option value="pt" {% if settings and settings.language == 'pt' %}selected{% endif %}>Portuguese</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is_gold_jewellers_sidebar">Sidebar Info</label>
+                    <select id="is_gold_jewellers_sidebar" name="is_gold_jewellers_sidebar" class="form-control">
+                        <option value="1" {% if settings and settings.is_gold_jewellers_sidebar == 1 %}selected{% endif %}>Yes</option>
+                        <option value="0" {% if settings and settings.is_gold_jewellers_sidebar == 0 %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is_gold_calculator_enabled">Gold Calculator</label>
+                    <select id="is_gold_calculator_enabled" name="is_gold_calculator_enabled" class="form-control">
+                        <option value="1" {% if settings and settings.is_gold_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="0" {% if settings and settings.is_gold_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is_silver_calculator_enabled">Silver Calculator</label>
+                    <select id="is_silver_calculator_enabled" name="is_silver_calculator_enabled" class="form-control">
+                        <option value="1" {% if settings and settings.is_silver_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="0" {% if settings and settings.is_silver_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
     </form>

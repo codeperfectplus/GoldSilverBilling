@@ -9,12 +9,16 @@
     <h1>Welcome to the Pricing Calculator</h1>
     <p>Select a calculator to get started.</p>
     <div class="hero-buttons">
-        <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero">
-            <i class="fa-solid fa-coins fa-lg"></i> Gold Calculator
-        </a>
+        {% if is_gold_calculator_enabled %}
+            <a href="{{ url_for('gold_calculator') }}" class="btn btn-hero">
+                <i class="fa-solid fa-coins fa-lg"></i> Gold Calculator
+            </a>
+        {% endif %}
+        {% if is_silver_calculator_enabled %}
         <a href="{{ url_for('silver_calculator') }}" class="btn btn-hero">
             <i class="fa-solid fa-gem fa-lg"></i> Silver Calculator
         </a>
+        {% endif %}
         <a href="{{ url_for('features') }}" class="btn btn-hero">
             <i class="fa-solid fa-medal fa-lg"></i> Features
         </a>
