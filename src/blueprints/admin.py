@@ -143,10 +143,6 @@ def dashboard():
     audit_logs = AuditLog.query.filter_by(user_id=current_user.id).order_by(AuditLog.timestamp.desc()).all()
     if current_user.user_level == 'admin':
         
-        if not current_user.password_changed:
-            flash('You need to change your password first to continue.', 'warning')
-            return render_template('change_password.html', settings=system_settings)
-
         total_users = User.query.count()  # Count total users
         active_sessions = len(session)  # This is a basic approach. You may want to track sessions differently.
         

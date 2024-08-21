@@ -40,11 +40,6 @@ def login():
             login_user(user)
             log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
 
-            # Check if the admin needs to change their password
-            if user.user_level == 'admin' and not user.password_changed:
-                flash('You need to change your password first to continue.', 'warning')
-                return redirect(url_for('auth.change_password'))
-            
             flash(f'Login successful as {user.username}', 'success')
             return redirect(url_for('admin.dashboard'))
         else:
