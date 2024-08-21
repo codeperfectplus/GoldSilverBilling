@@ -41,6 +41,8 @@
         </form>
     </div>
     <!-- Sidebar -->
-    {% include 'ext/sidebar_jweller.html' %}
+    {% if settings.is_gold_jewellers_sidebar %}
+        {% include 'ext/sidebar_jweller.html' %}
+    {% endif %}
 </div>
 {% endblock %}

@@ -9,7 +9,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, send_file
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt, generate_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from calculators import GoldCalculator, SilverCalculator
 
@@ -55,6 +55,8 @@ currency_to_symbol_dict = {
         "AUD" : "A$ ",
     }
 
+def get_currency_symbol(currency):
+    return currency_to_symbol_dict.get(currency, currency)
 
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,6 +115,27 @@ class AuditLog(db.Model):
     def __repr__(self):
         return f"AuditLog('{self.user_id}', '{self.action}', '{self.timestamp}')"
 
+class JewellerDetails(db.Model):
+    __tablename__ = 'jeweller_details'
+    id = db.Column(db.Integer, primary_key=True)
+    jeweller_name = db.Column(db.String(100), nullable=False)
+    jeweller_address = db.Column(db.String(255), nullable=False)
+    jeweller_contact = db.Column(db.String(15), nullable=False)
+    jeweller_email = db.Column(db.String(100), nullable=False)
+    jeweller_website = db.Column(db.String(100), nullable=False)
+    jeweller_gstin = db.Column(db.String(15), nullable=False)
+    gold_price_per_gram = db.Column(db.Float, nullable=False)
+    jeweller_logo = db.Column(db.String(255), nullable=True)
+
+    def __init__(self, jeweller_name, jeweller_address, jeweller_contact, jeweller_email, jeweller_website, jeweller_gstin, gold_price_per_gram, jeweller_logo):
+        self.jeweller_name = jeweller_name
+        self.jeweller_address = jeweller_address
+        self.jeweller_contact = jeweller_contact
+        self.jeweller_email = jeweller_email
+        self.jeweller_website = jeweller_website
+        self.jeweller_gstin = jeweller_gstin
+        self.gold_price_per_gram = gold_price_per_gram
+        self.jeweller_logo = jeweller_logo
 
 # Create the database
 with app.app_context():
@@ -129,6 +152,38 @@ with app.app_context():
     db.session.add(settings)
     db.session.commit()
 
+# initial commit in database for jeweller_details
+with app.app_context():
+    db.create_all()
+    jeweller_details = JewellerDetails(
+        jeweller_name='GoldSilverBilling',
+        jeweller_address='123, Main Street, City, Country',
+        jeweller_contact='1234567890',
+        jeweller_email='info@goldsilverbilling.com',
+        jeweller_website='https://goldsilverbilling.com',
+        jeweller_gstin='ABC1234567890',
+        gold_price_per_gram=5000.00,
+        jeweller_logo='images/logo.png')
+    db.session.add(jeweller_details)
+    db.session.commit()
+
+# create a initial admin user
+with app.app_context():
+    # Check if the admin user already exists
+    if not User.query.filter_by(username='admin').first():
+        admin_user = User(
+            fname='Admin',
+            lname='User',
+            username='admin',
+            email='admin@gmail.com',
+            password=generate_password_hash('admin'),
+            user_level='admin'
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Admin user created successfully.")
+    else:
+        print("Admin user already exists.")
 
 @app.route('/health')
 def health():
@@ -164,6 +219,7 @@ def inject_theme():
 @app.route('/gold-calculator', methods=['GET', 'POST'])
 def gold_calculator():
     system_settings = Settings.query.first()
+    jeweller_details = JewellerDetails.query.first()
     if not system_settings.is_gold_calculator_enabled:
         return redirect(url_for('permission_denied'))
     if request.method == 'POST':
@@ -200,6 +256,9 @@ def gold_calculator():
             if current_user.is_authenticated:
                 log_action(user_id=current_user.id, username=current_user.username,
                            action='Gold Calculator', details=f"Calculated gold price for weight {weight} grams")
+            else:
+                log_action(user_id="-1", username="Anonymous",
+                           action='Gold Calculator', details=f"Calculated gold price for weight {weight} grams")
                 
             return render_template('gold_bill.html',
                                    bill=bill_details,
@@ -207,9 +266,8 @@ def gold_calculator():
                                    price_per_gram=gold_price_per_gram,
                                    purity=purity,
                                    config=app.config,
-                                   current_currency=system_settings.currency,
-                                   currency_symbol=system_settings.currency_symbol,
-                                   is_gold_jewellers_sidebar=system_settings.is_gold_jewellers_sidebar)
+                                   currency_symbol=get_currency_symbol(system_settings.currency))
+        
         except ValueError as e:
             logging.error(f"ValueError in gold calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -225,9 +283,9 @@ def gold_calculator():
                            service_charge=gold_service_charge,
                            tax=gold_tax,
                            config=app.config,
-                           current_currency=system_settings.currency,
-                           currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'),
-                           is_gold_jewellers_sidebar=system_settings.is_gold_jewellers_sidebar)
+                           settings=system_settings,
+                           jeweller_details=jeweller_details,
+                           currency_symbol=get_currency_symbol(system_settings.currency))
                            
 
 # Silver calculator route
@@ -277,8 +335,8 @@ def silver_calculator():
                                    price_per_gram=silver_price_per_gram,
                                    purity=silver_purity,
                                    config=app.config,
-                                   current_currency=system_settings.currency,
-                                   currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'))
+                                   settings=system_settings,
+                                   currency_symbol=get_currency_symbol(system_settings.currency))
         except ValueError as e:
             logging.error(f"ValueError in silver calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -294,8 +352,8 @@ def silver_calculator():
                            service_charge=silver_service_charge,
                            tax=silver_tax,
                            config=app.config,
-                           current_currency=system_settings.currency,
-                           currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'))
+                           settings=system_settings,
+                           currency_symbol=get_currency_symbol(system_settings.currency))
 
 @app.route('/history', methods=['GET'])
 @login_required
@@ -534,6 +592,31 @@ def audit_log():
 
     logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).all()
     return render_template('audit_log.html', logs=logs)
+
+
+@app.route('/config', methods=['GET', 'POST'])
+def update_jeweller_details():
+    if request.method == 'POST':
+        jeweller = JewellerDetails.query.first()
+
+        jeweller.jeweller_name = request.form['jeweller_name']
+        jeweller.jeweller_address = request.form['jeweller_address']
+        jeweller.jeweller_contact = request.form['jeweller_contact']
+        jeweller.jeweller_email = request.form['jeweller_email']
+        jeweller.jeweller_website = request.form['jeweller_website']
+        jeweller.jeweller_gstin = request.form['jeweller_gstin']
+        jeweller.gold_price_per_gram = float(request.form['gold_price_per_gram'])
+
+        if 'jeweller_logo' in request.files:
+            logo = request.files['jeweller_logo']
+            logo.save(f'static/images/{logo.filename}')
+            jeweller.jeweller_logo = f'images/{logo.filename}'
+
+        db.session.commit()
+        return redirect(url_for('update_jeweller_details'))
+
+    jeweller = JewellerDetails.query.first()
+    return render_template('config.html', jeweller=jeweller)
 
 
 if __name__ == '__main__':

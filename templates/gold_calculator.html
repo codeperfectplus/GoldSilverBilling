@@ -26,7 +26,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="price_per_gram">Price per gram ({{ current_currency }}): <i class="fa-solid fa-weight-hanging"></i></label>
+                <label for="price_per_gram">Price per gram ({{ settings.currency }}): <i class="fa-solid fa-weight-hanging"></i></label>
                 <input type="number" step="0.01" name="price_per_gram" id="price_per_gram" class="form-control" placeholder="Enter price per gram" value="{{ price_per_gram }}" required>
             </div>
             
@@ -50,7 +50,7 @@
             {% endif %}
         </form>
     </div>
-    {% if is_gold_jewellers_sidebar %}
+    {% if settings.is_gold_jewellers_sidebar %}
         {% include 'ext/sidebar_jweller.html' %}
     {% endif %}
 </div>
