@@ -11,6 +11,8 @@
 <div class="customer-dashboard">
     <h2 class="dashboard-title">Customer Dashboard</h2>
     <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
+    <!-- Display flash messages -->
+    {% include "ext/flash_message.html" %}
     
     <div class="dashboard-content">
         <div class="profile-summary">

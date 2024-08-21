@@ -15,6 +15,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/manage_users', methods=['GET', 'POST'])
 @login_required
 def manage_users():
+    system_settings = Settings.query.first()
     if current_user.user_level != 'admin':
         return redirect(url_for('permission_denied'))
 
@@ -30,9 +31,9 @@ def manage_users():
             db.session.commit()
             flash(f"User {user.username}'s level updated to {new_level}.", 'success')
         else:
-            flash("User not found.", 'error')
+            flash("User not found.", 'danger')
 
-    return render_template('manage_users.html', users=users)
+    return render_template('manage_users.html', users=users, settings=system_settings)
 
 @admin_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
@@ -44,15 +45,21 @@ def settings():
         currency = request.form.get('currency')
         theme = request.form.get('theme')
         language = request.form.get('language')
-        is_gold_jewellers_sidebar = int(request.form.get('is_gold_jewellers_sidebar'))
-        is_gold_calculator_enabled = int(request.form.get('is_gold_calculator_enabled'))
-        is_silver_calculator_enabled = int(request.form.get('is_silver_calculator_enabled'))
+        is_flash_message_enabled = request.form.get('is_flash_message_enabled')
+        flash_message_timeout = request.form.get('flash_message_timeout')
+        if flash_message_timeout is None:
+            flash_message_timeout = 5
+        is_gold_jewellers_sidebar = request.form.get('is_gold_jewellers_sidebar')
+        is_gold_calculator_enabled = request.form.get('is_gold_calculator_enabled')
+        is_silver_calculator_enabled = request.form.get('is_silver_calculator_enabled')
 
         # Save the settings (you might save them to a database or a config file)
         # Assuming you have a Settings model or similar logic to save settings
         settings = Settings.query.first()
         if not settings:
             settings = Settings(currency=currency, theme=theme, language=language,
+                                is_flash_message_enabled=is_flash_message_enabled,
+                                flash_message_timeout=flash_message_timeout,
                                 is_gold_jewellers_sidebar=is_gold_jewellers_sidebar,
                                 is_gold_calculator_enabled=is_gold_calculator_enabled,
                                 is_silver_calculator_enabled=is_silver_calculator_enabled)
@@ -60,9 +67,11 @@ def settings():
             settings.currency = currency
             settings.theme = theme
             settings.language = language
-            settings.is_gold_jewellers_sidebar = is_gold_jewellers_sidebar
-            settings.is_gold_calculator_enabled = is_gold_calculator_enabled
-            settings.is_silver_calculator_enabled = is_silver_calculator_enabled
+            settings.is_flash_message_enabled = int(request.form.get('is_flash_message_enabled'))
+            settings.flash_message_timeout = int(flash_message_timeout)
+            settings.is_gold_jewellers_sidebar = int(is_gold_jewellers_sidebar)
+            settings.is_gold_calculator_enabled = int(is_gold_calculator_enabled)
+            settings.is_silver_calculator_enabled = int(is_silver_calculator_enabled)
 
         db.session.add(settings)
         db.session.commit()
@@ -87,6 +96,7 @@ def audit_log():
 @admin_bp.route("/dashboard")
 @login_required
 def dashboard():
+    system_settings = Settings.query.first()
     if current_user.user_level == 'admin':
         total_users = User.query.count()  # Count total users
         active_sessions = len(session)  # This is a basic approach. You may want to track sessions differently.
@@ -110,7 +120,8 @@ def dashboard():
                             system_health=system_health,
                             cpu_core=cpu_core,
                             cpu_util=cpu_utilization,
-                            audit_logs=audit_logs)
+                            audit_logs=audit_logs,
+                            settings=system_settings)
     elif current_user.user_level == 'customer':
         audit_logs = AuditLog.query.filter_by(user_id=current_user.id).all()
         return render_template('customer_dashboard.html', audit_logs=audit_logs)

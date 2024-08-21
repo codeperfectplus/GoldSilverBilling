@@ -43,6 +43,8 @@ class Settings(db.Model):
     currency = db.Column(db.String(10), nullable=False)
     theme = db.Column(db.String(10), nullable=False)
     language = db.Column(db.String(15), nullable=False)
+    is_flash_message_enabled = db.Column(db.Boolean, default=False)
+    flash_message_timeout = db.Column(db.Integer, nullable=False, default=5)
     is_gold_jewellers_sidebar = db.Column(db.Boolean, default=False)
     is_gold_calculator_enabled = db.Column(db.Boolean, default=False)
     is_silver_calculator_enabled = db.Column(db.Boolean, default=False)
@@ -90,6 +92,8 @@ with app.app_context():
             currency='INR', 
             theme='light', 
             language='en',
+            is_flash_message_enabled=True,
+            flash_message_timeout=5,
             is_gold_jewellers_sidebar=True,
             is_gold_calculator_enabled=True, 
             is_silver_calculator_enabled=True
@@ -129,6 +133,19 @@ with app.app_context():
         print("Admin user created successfully.")
     else:
         print("Admin user already exists.")
+    
+    # Create a customer user
+    if not User.query.filter_by(username='customer').first():
+        customer_user = User(
+            fname='Customer',
+            lname='User',
+            username='customer',
+            email='customer@gmail.com',
+            password=generate_password_hash('customer'),
+            user_level='customer')
+        db.session.add(customer_user)
+        db.session.commit()
+
 
 # Audit Logging Function
 def log_action(user_id, username, action, details=None):

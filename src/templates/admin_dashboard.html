@@ -12,6 +12,8 @@
 <div class="admin-dashboard">
     <h2 class="dashboard-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
     <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
+    <!-- Display flash messages -->
+    {% include "ext/flash_message.html" %}
     
     <div class="stats-cards">
         <div class="card">

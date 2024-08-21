@@ -63,6 +63,8 @@ def silver_calculator():
             )
             db.session.add(transaction)
             db.session.commit()
+            flash("Bill generated successfully!", 'success')
+            flash("Please consider giving a star on GitHub if you find this project useful!", 'info')
                 
             return render_template('silver_bill.html',
                                    bill=bill_details,

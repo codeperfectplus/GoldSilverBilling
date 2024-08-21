@@ -1,10 +1,10 @@
 
-from flask import render_template, request, redirect, url_for,  Blueprint
+from flask import render_template, request, redirect, url_for,  Blueprint, flash
 
 from flask_login import login_user, logout_user
 
 from src.config import app, db, bcrypt, login_manager
-from src.models import User, log_action
+from src.models import User, log_action, Settings
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -24,11 +24,12 @@ def register():
         user = User(fname=fname, lname=lname, username=username, email=email, password=password, user_level=user_level)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     return render_template('register.html')
 
 @auth_bp.route("/login", methods=['GET', 'POST'])
 def login():
+    system_settings = Settings.query.first()
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -36,6 +37,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
+            flash(f'Login successful as {user.username}', 'success')
             return redirect(url_for('admin.dashboard'))
     return render_template('login.html')
 
@@ -47,5 +49,3 @@ def logout():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-

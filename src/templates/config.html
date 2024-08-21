@@ -8,15 +8,7 @@
     <h1>Jeweller Details</h1>
 
     <!-- Display flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
+    {% include "ext/flash_message.html" %}
 
     <form method="POST" action="{{ url_for('admin.update_jeweller_details') }}" enctype="multipart/form-data">
         <div class="row">

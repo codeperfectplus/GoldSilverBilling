@@ -9,15 +9,7 @@
     <h1>System Settings</h1>
 
     <!-- Display flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
+    {% include "ext/flash_message.html" %}
 
     <form method="POST" action="{{ url_for('admin.settings') }}">
         <div class="row">
@@ -88,6 +80,27 @@
                     </select>
                 </div>
             </div>
+            <!-- Flash message flag -->
+            <!-- is_flash_message_enabled = db.Column(db.Boolean, default=False)
+            flash_message_timeout = db.Column(db.Integer, nullable=False, default=5)
+             -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is_flash_message_enabled">Flash Message</label>
+                    <select id="is_flash_message_enabled" name="is_flash_message_enabled" class="form-control">
+                        <option value="1" {% if settings and settings.is_flash_message_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="0" {% if settings and settings.is_flash_message_enabled == 0 %}selected{% endif %}>Disabled</option>
+                    </select>
+                </div>
+            </div>
+            {% if settings and settings.is_flash_message_enabled %}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="flash_message_timeout">Flash Message Timeout (seconds)</label>
+                        <input type="number" id="flash_message_timeout" name="flash_message_timeout" class="form-control" value="{{ settings.flash_message_timeout if settings else '' }}">
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
     </form>

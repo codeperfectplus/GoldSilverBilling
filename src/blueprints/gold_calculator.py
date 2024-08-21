@@ -31,6 +31,14 @@ def gold_calculator():
             session['gold_service_charge'] = gold_service_charge
             session['gold_tax'] = gold_tax
 
+            if gold_price_per_gram <= 0:
+                flash('Invalid gold price per gram.', 'danger')
+                return redirect(url_for('gold_calculator.gold_calculator'))
+
+            if weight <= 0:
+                flash('Invalid weight.', 'danger')
+                return redirect(url_for('gold_calculator.gold_calculator'))
+
             # Calculate gold price
             gold_item = GoldCalculator(weight, gold_price_per_gram, gold_service_charge, gold_tax)
             bill_details = gold_item.calculate_price()
@@ -55,6 +63,9 @@ def gold_calculator():
             else:
                 log_action(user_id="-1", username="Anonymous",
                            action='Gold Calculator', details=f"Calculated gold price for weight {weight} grams")
+                
+            flash("Bill generated successfully!", 'success')
+            flash("Please consider giving a star on GitHub if you find this project useful!", 'info')
                 
             return render_template('gold_bill.html',
                                    bill=bill_details,

@@ -9,18 +9,8 @@
     <div class="main-content">
         <h1>Silver Price Calculator</h1>
         <p class="text-center">Get accurate silver prices with our easy-to-use calculator!</p>
-
         <!-- Display flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-        
+        {% include "ext/flash_message.html" %}
         <form action="/silver-calculator" method="POST" class="shadow p-4 bg-white rounded">
             <div class="form-group">
                 <label for="weight">Weight (grams): <i class="fa-solid fa-scale-balanced"></i></label>
