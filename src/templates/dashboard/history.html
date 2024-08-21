@@ -7,7 +7,7 @@
     <h1>Transaction History</h1>
 
     <!-- Filter Form -->
-    <form method="GET" action="{{ url_for('admin.history') }}">
+    <form method="GET" action="{{ url_for('admin_.history') }}">
         <label for="transaction_type">Filter by Type:</label>
         <select id="transaction_type" name="type">
             <option value="all" {% if selected_type == "all" %}selected{% endif %}>All</option>
@@ -18,7 +18,7 @@
     </form>
 
     <!-- Download CSV Button -->
-    <form method="POST" action="{{ url_for('admin.download_transactions_history') }}">
+    <form method="POST" action="{{ url_for('admin_.download_transactions_history') }}">
         <button type="submit">Download as CSV</button>
     </form>
 

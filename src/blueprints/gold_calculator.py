@@ -69,7 +69,7 @@ def gold_calculator():
             flash("Bill generated successfully!", 'success')
             flash("Please consider giving a star on GitHub if you find this project useful!", 'info')
                 
-            return render_template('gold_bill.html',
+            return render_template('calculators/gold_bill.html',
                                    bill=bill_details,
                                    weight=weight,
                                    price_per_gram=gold_price_per_gram,
@@ -88,7 +88,7 @@ def gold_calculator():
     gold_service_charge = session.get('gold_service_charge', 0)
     gold_tax = session.get('gold_tax', 0)
 
-    return render_template('gold_calculator.html',
+    return render_template('calculators/gold_calculator.html',
                            price_per_gram=gold_price_per_gram,
                            service_charge=gold_service_charge,
                            tax=gold_tax,

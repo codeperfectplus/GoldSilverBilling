@@ -12,4 +12,4 @@ def health():
         "version": "1.0.0",
         "timestamp": datetime.now().isoformat()
     }
-    return render_template('health.html', **health_info)
+    return render_template('others/health.html', **health_info)

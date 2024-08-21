@@ -66,7 +66,7 @@ def silver_calculator():
             flash("Bill generated successfully!", 'success')
             flash("Please consider giving a star on GitHub if you find this project useful!", 'info')
                 
-            return render_template('silver_bill.html',
+            return render_template('calculators/silver_bill.html',
                                    bill=bill_details,
                                    weight=weight,
                                    price_per_gram=silver_price_per_gram,
@@ -84,7 +84,7 @@ def silver_calculator():
     silver_service_charge = session.get('silver_service_charge', 0)
     silver_tax = session.get('silver_tax', 0)
 
-    return render_template('silver_calculator.html',
+    return render_template('calculators/silver_calculator.html',
                            price_per_gram=silver_price_per_gram,
                            service_charge=silver_service_charge,
                            tax=silver_tax,

@@ -1,4 +1,5 @@
-from src.config import app
+from src.config import app, db
+
 from src.blueprints import (
     additional_bp,
     admin_bp,
@@ -7,15 +8,18 @@ from src.blueprints import (
     health_bp,
     homepage_bp,
     silver_calculator_bp,
+    users_bp
 )
 
+
 app.register_blueprint(additional_bp)
-app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(admin_bp, url_prefix='/')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(gold_calculator_bp)
 app.register_blueprint(health_bp)
 app.register_blueprint(homepage_bp)
 app.register_blueprint(silver_calculator_bp)
+app.register_blueprint(users_bp)
 
 
 

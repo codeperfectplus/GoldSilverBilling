@@ -27,7 +27,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('auth.login'))
-    return render_template('register.html')
+    return render_template('admin/register.html')
 
 @auth_bp.route("/login", methods=['GET', 'POST'])
 def login():
@@ -41,10 +41,10 @@ def login():
             log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
 
             flash(f'Login successful as {user.username}', 'success')
-            return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('admin_.dashboard'))
         else:
             flash('Login failed. Please check your credentials.', 'danger')
-    return render_template('login.html', settings=system_settings)
+    return render_template('admin/login.html', settings=system_settings)
 
 @auth_bp.route("/change-password", methods=['GET', 'POST'])
 @login_required
@@ -69,9 +69,9 @@ def change_password():
     # if current user password_changed false, flash a message
     if not current_user.password_changed:
         flash('You need to change your password first to continue.', 'warning')
-        return render_template('change_password.html', settings=system_settings)
+        return render_template('admin/change_password.html', settings=system_settings)
 
-    return render_template('change_password.html', settings=system_settings)
+    return render_template('admin/change_password.html', settings=system_settings)
         
 
 @auth_bp.route("/logout")

@@ -1,10 +1,11 @@
 from src.blueprints.additional import additional_bp
-from src.blueprints.admin import admin_bp
+from src.blueprints.admin_dashboard import admin_bp
 from src.blueprints.auth import auth_bp
 from src.blueprints.gold_calculator import gold_calculator_bp
 from src.blueprints.health import health_bp
 from src.blueprints.homepage import homepage_bp
 from src.blueprints.silver_calculator import silver_calculator_bp
+from src.blueprints.users import users_bp
 
 __all__ = [
     'additional_bp',

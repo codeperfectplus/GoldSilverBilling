@@ -6,3 +6,4 @@ flask-sqlalchemy
 Flask-Login
 Flask-Bcrypt
 psutil
+flask-admin

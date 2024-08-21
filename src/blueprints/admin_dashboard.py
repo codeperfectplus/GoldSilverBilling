@@ -10,30 +10,8 @@ from src.config import db
 from src.models import User, AuditLog, Settings, log_action
 from src.models import GoldTransaction, SilverTransaction, JewellerDetails, Settings
 
-admin_bp = Blueprint('admin', __name__)
+admin_bp = Blueprint('admin_', __name__)
 
-@admin_bp.route('/manage_users', methods=['GET', 'POST'])
-@login_required
-def manage_users():
-    system_settings = Settings.query.first()
-    if current_user.user_level != 'admin':
-        return redirect(url_for('additional.permission_denied'))
-
-    users = User.query.all()
-
-    if request.method == 'POST':
-        user_id = request.form.get('user_id')
-        new_level = request.form.get('user_level')
-        
-        user = User.query.get(user_id)
-        if user:
-            user.user_level = new_level
-            db.session.commit()
-            flash(f"User {user.username}'s level updated to {new_level}.", 'success')
-        else:
-            flash("User not found.", 'danger')
-
-    return render_template('manage_users.html', users=users, settings=system_settings)
 
 @admin_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
@@ -94,7 +72,7 @@ def settings():
         # if not settings changes add no changed done message, and dont't commit
         if not logs:
             flash("No changes made.", 'info')
-            return redirect(url_for('admin.settings'))
+            return redirect(url_for('admin_.settings'))
 
         log_action(current_user.id, current_user.username, 'System Settings Change', details=logs)
         
@@ -120,10 +98,10 @@ def settings():
         db.session.commit()
         for log in logs:
             flash(log, 'success')
-        return redirect(url_for('admin.settings'))
+        return redirect(url_for('admin_.settings'))
     
     settings = Settings.query.first()
-    return render_template('settings.html', settings=settings)
+    return render_template('dashboard/settings.html', settings=settings)
 
 
 @admin_bp.route('/audit_log')
@@ -133,7 +111,7 @@ def audit_log():
         return redirect(url_for('home'))
 
     logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).all()
-    return render_template('audit_log.html', logs=logs)
+    return render_template('dashboard/audit_log.html', logs=logs)
 
 
 @admin_bp.route("/dashboard")
@@ -158,7 +136,7 @@ def dashboard():
         else:
             system_health = "Good"
 
-        return render_template('admin_dashboard.html', 
+        return render_template('dashboard/admin_dashboard.html', 
                             total_users=total_users, 
                             active_sessions=active_sessions, 
                             system_health=system_health,
@@ -168,7 +146,8 @@ def dashboard():
                             settings=system_settings,
                             current_user=current_user)
     elif current_user.user_level == 'customer':
-        return render_template('customer_dashboard.html', audit_logs=audit_logs)
+        audit_logs = AuditLog.query.filter_by(user_id=current_user.id)
+        return render_template('dashboard/customer_dashboard.html', settings=system_settings)
  
 # Silver calculator route
 @admin_bp.route('/history', methods=['GET'])
@@ -200,7 +179,7 @@ def history():
                           'purity': t.purity, 'service_charge': t.service_charge, 'tax': t.tax, 'total': t.total, 'currency': t.currency,
                           'timestamp': t.timestamp} for t in silver_transactions]
 
-    return render_template('history.html', transactions=transactions, selected_type=selected_type)
+    return render_template('dashboard/history.html', transactions=transactions, selected_type=selected_type)
 
 @admin_bp.route('/download_audit_log', methods=['POST'])
 def download_audit_log():
@@ -284,7 +263,7 @@ def update_jeweller_details():
         db.session.commit()
 
         flash('Jeweller details updated successfully!', 'success')
-        return redirect(url_for('admin.update_jeweller_details'))
+        return redirect(url_for('admin_.update_jeweller_details'))
 
     jeweller = JewellerDetails.query.first()
-    return render_template('config.html', jeweller=jeweller, settings=system_settings)
+    return render_template('dashboard/config.html', jeweller=jeweller, settings=system_settings)

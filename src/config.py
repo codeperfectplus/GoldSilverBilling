@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Load configuration from environment variables or fallback to defaults
 app.secret_key = os.getenv('SECRET_KEY', 'jhd87^&*^udhwduy792ejlndhy783uh')
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///production.db' # commit this to git
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Session(app)
 db = SQLAlchemy(app)
@@ -22,7 +22,7 @@ login_manager.login_view = 'auth.login'
 # 404 error handler
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('others/404.html'), 404
 
 # 500 error handler
 @app.errorhandler(500)
