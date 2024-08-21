@@ -1,52 +1,19 @@
-import os
-import json
 import logging 
 import csv
 import psutil
 from io import StringIO, BytesIO
 from datetime import datetime
 
-from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, send_file
-from flask_session import Session
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt, generate_password_hash
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from flask import render_template, request, session, redirect, url_for, flash, send_file
+from flask_login import login_user, logout_user, current_user, login_required
 from calculators import GoldCalculator, SilverCalculator
 
-# Initialize the Flask app
-app = Flask(__name__)
+from config import app, db, bcrypt, login_manager
+from models import User, AuditLog, Settings, GoldTransaction, SilverTransaction, JewellerDetails
 
-# Load configuration from environment variables or fallback to defaults
-app.secret_key = os.getenv('SECRET_KEY', 'jhd87^&*^udhwduy792ejlndhy783uh')
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-Session(app)
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
 
-# Load configuration from JSON file
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_DIR = os.path.join(ROOT_DIR, 'config')
-CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, 'config.json')
-
-def load_config() -> dict:
-    """Loads configuration from a JSON file."""
-    try:
-        with open(CONFIG_FILE_PATH) as config_file:
-            return json.load(config_file)
-    except FileNotFoundError:
-        logging.error(f"Configuration file not found at {CONFIG_FILE_PATH}")
-        return {}
-    except json.JSONDecodeError as e:
-        logging.error(f"Error decoding JSON config: {e}")
-        return {}
-
-app.config.update(load_config())
-
-currency_to_symbol_dict = {
+def get_currency_symbol(currency):
+    currency_to_symbol_dict = {
         "INR" : "₹",
         "USD" : "$ ",
         "EUR" : "€ ",
@@ -54,135 +21,8 @@ currency_to_symbol_dict = {
         "JPY" : "¥ ",
         "AUD" : "A$ ",
     }
-
-def get_currency_symbol(currency):
     return currency_to_symbol_dict.get(currency, currency)
 
-class GoldTransaction(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    weight = db.Column(db.Float, nullable=False)
-    price_per_gram = db.Column(db.Float, nullable=False)
-    purity = db.Column(db.String(50), nullable=False)
-    service_charge = db.Column(db.Float, nullable=False)
-    tax = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=False)
-    currency = db.Column(db.String(3), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-
-class SilverTransaction(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    weight = db.Column(db.Float, nullable=False)
-    price_per_gram = db.Column(db.Float, nullable=False)
-    purity = db.Column(db.String(50), nullable=False)
-    service_charge = db.Column(db.Float, nullable=False)
-    tax = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=False)
-    currency = db.Column(db.String(3), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(20), nullable=False)
-    lname = db.Column(db.String(20), nullable=False)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    user_level = db.Column(db.String(10), nullable=False, default='customer')
-
-    def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.user_level}')"
-
-
-class Settings(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    currency = db.Column(db.String(10), nullable=False)
-    theme = db.Column(db.String(10), nullable=False)
-    language = db.Column(db.String(15), nullable=False)
-    is_gold_jewellers_sidebar = db.Column(db.Boolean, default=False)
-    is_gold_calculator_enabled = db.Column(db.Boolean, default=False)
-    is_silver_calculator_enabled = db.Column(db.Boolean, default=False)
-
-class AuditLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    username = db.Column(db.String(20), nullable=False)
-    action = db.Column(db.String(255), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    details = db.Column(db.Text, nullable=True)
-
-    def __repr__(self):
-        return f"AuditLog('{self.user_id}', '{self.action}', '{self.timestamp}')"
-
-class JewellerDetails(db.Model):
-    __tablename__ = 'jeweller_details'
-    id = db.Column(db.Integer, primary_key=True)
-    jeweller_name = db.Column(db.String(100), nullable=False)
-    jeweller_address = db.Column(db.String(255), nullable=False)
-    jeweller_contact = db.Column(db.String(15), nullable=False)
-    jeweller_email = db.Column(db.String(100), nullable=False)
-    jeweller_website = db.Column(db.String(100), nullable=False)
-    jeweller_gstin = db.Column(db.String(15), nullable=False)
-    gold_price_per_gram = db.Column(db.Float, nullable=False)
-    jeweller_logo = db.Column(db.String(255), nullable=True)
-
-    def __init__(self, jeweller_name, jeweller_address, jeweller_contact, jeweller_email, jeweller_website, jeweller_gstin, gold_price_per_gram, jeweller_logo):
-        self.jeweller_name = jeweller_name
-        self.jeweller_address = jeweller_address
-        self.jeweller_contact = jeweller_contact
-        self.jeweller_email = jeweller_email
-        self.jeweller_website = jeweller_website
-        self.jeweller_gstin = jeweller_gstin
-        self.gold_price_per_gram = gold_price_per_gram
-        self.jeweller_logo = jeweller_logo
-
-# Create the database
-with app.app_context():
-    db.create_all()
-
-
-# first commit in database for settings
-with app.app_context():
-    if not Settings.query.first():
-        settings = Settings(currency='INR', theme='light', language='en',
-                            is_gold_jewellers_sidebar=True,
-                            is_gold_calculator_enabled=True, 
-                            is_silver_calculator_enabled=True)
-        db.session.add(settings)
-        db.session.commit()
-
-# initial commit in database for jeweller_details
-with app.app_context():
-    if not JewellerDetails.query.first():
-        jeweller_details = JewellerDetails(
-            jeweller_name='GoldSilverBilling',
-            jeweller_address='123, Main Street, City, Country',
-            jeweller_contact='1234567890',
-            jeweller_email='info@goldsilverbilling.com',
-            jeweller_website='https://goldsilverbilling.com',
-            jeweller_gstin='ABC1234567890',
-            gold_price_per_gram=5000.00,
-            jeweller_logo='images/logo.png')
-        db.session.add(jeweller_details)
-        db.session.commit()
-
-# create a initial admin user
-with app.app_context():
-    if not User.query.filter_by(username='admin').first():
-        admin_user = User(
-            fname='Admin',
-            lname='User',
-            username='admin',
-            email='admin@gmail.com',
-            password=generate_password_hash('admin'),
-            user_level='admin'
-        )
-        db.session.add(admin_user)
-        db.session.commit()
-        print("Admin user created successfully.")
-    else:
-        print("Admin user already exists.")
 
 @app.route('/health')
 def health():
@@ -208,10 +48,6 @@ def home() -> str:
     system_settings = Settings.query.first()
     return render_template('homepage.html', is_gold_calculator_enabled=system_settings.is_gold_calculator_enabled,
                            is_silver_calculator_enabled=system_settings.is_silver_calculator_enabled)
-
-@app.context_processor
-def inject_theme():
-    return dict(current_theme=app.config.get('THEME', 'light'))
 
 
 # Gold calculator route
@@ -264,7 +100,8 @@ def gold_calculator():
                                    weight=weight,
                                    price_per_gram=gold_price_per_gram,
                                    purity=purity,
-                                   config=app.config,
+                                   settings=system_settings,
+                                   jeweller_details=jeweller_details,
                                    currency_symbol=get_currency_symbol(system_settings.currency))
         
         except ValueError as e:
@@ -281,7 +118,6 @@ def gold_calculator():
                            price_per_gram=gold_price_per_gram,
                            service_charge=gold_service_charge,
                            tax=gold_tax,
-                           config=app.config,
                            settings=system_settings,
                            jeweller_details=jeweller_details,
                            currency_symbol=get_currency_symbol(system_settings.currency))
@@ -291,6 +127,7 @@ def gold_calculator():
 @app.route('/silver-calculator', methods=['GET', 'POST'])
 def silver_calculator():
     system_settings = Settings.query.first()
+    jeweller_details = JewellerDetails.query.first()
     if not system_settings.is_silver_calculator_enabled:
         return redirect(url_for('permission_denied'))
     if request.method == 'POST':
@@ -312,7 +149,7 @@ def silver_calculator():
                 price_per_gram=silver_price_per_gram,
                 service_charge=silver_service_charge,
                 tax=silver_tax,
-                purity=silver_purity
+                purity=silver_purity,
             )
             bill_details = silver_item.calculate_price()
 
@@ -323,6 +160,7 @@ def silver_calculator():
                 service_charge=silver_service_charge,
                 tax=silver_tax,
                 total=bill_details['Final Price'],
+                currency=system_settings.currency,
                 purity=silver_purity
             )
             db.session.add(transaction)
@@ -333,8 +171,8 @@ def silver_calculator():
                                    weight=weight,
                                    price_per_gram=silver_price_per_gram,
                                    purity=silver_purity,
-                                   config=app.config,
                                    settings=system_settings,
+                                   jeweller_details=jeweller_details,
                                    currency_symbol=get_currency_symbol(system_settings.currency))
         except ValueError as e:
             logging.error(f"ValueError in silver calculator: {str(e)}")
@@ -350,8 +188,8 @@ def silver_calculator():
                            price_per_gram=silver_price_per_gram,
                            service_charge=silver_service_charge,
                            tax=silver_tax,
-                           config=app.config,
                            settings=system_settings,
+                           jeweller_details=jeweller_details,
                            currency_symbol=get_currency_symbol(system_settings.currency))
 
 @app.route('/history', methods=['GET'])
@@ -429,15 +267,15 @@ def download_csv():
 # Additional routes
 @app.route('/pricing')
 def pricing() -> str:
-    return render_template('pricing.html', config=app.config)
+    return render_template('pricing.html')
 
 @app.route('/features')
 def features() -> str:
-    return render_template('features.html', config=app.config)
+    return render_template('features.html')
 
 @app.route('/about')
 def about() -> str:
-    return render_template('about.html', config=app.config)
+    return render_template('about.html')
 
 @login_manager.user_loader
 def load_user(user_id):
