@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+<!-- Display flash messages -->
+{% include "ext/flash_message.html" %}
+<form method="POST">
+    <label for="username">Username:</label>
+    <input type="username" id="username" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Login</button>
+</form>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% block title %}Transaction History{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>Transaction History</h1>
+
+    <!-- Filter Form -->
+    <form method="GET" action="{{ url_for('admin.history') }}">
+        <label for="transaction_type">Filter by Type:</label>
+        <select id="transaction_type" name="type">
+            <option value="all" {% if selected_type == "all" %}selected{% endif %}>All</option>
+            <option value="gold" {% if selected_type == "gold" %}selected{% endif %}>Gold</option>
+            <option value="silver" {% if selected_type == "silver" %}selected{% endif %}>Silver</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Download CSV Button -->
+    <form method="POST" action="{{ url_for('admin.download_transactions_history') }}">
+        <button type="submit">Download as CSV</button>
+    </form>
+
+    <!-- Combined Table -->
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Currency</th>
+            <th>Weight (g)</th>
+            <th>Price per Gram</th>
+            <th>Purity</th>
+            <th>Service Charge</th>
+            <th>Tax</th>
+            <th>Total</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>{{ transaction.currency }}</td>
+            <td>{{ transaction.weight }}</td>
+            <td>{{ transaction.price_per_gram }}</td>
+            <td>{{ transaction.purity or 'N/A' }}</td>
+            <td>{{ transaction.service_charge }}</td>
+            <td>{{ transaction.tax }}</td>
+            <td>{{ transaction.total }}</td>
+            <td>{{ transaction.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% block title %} Silver Price Bill {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bill.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="bill-card">
+            <h2>Calculation Details (Silver)</h2>
+            <!-- Display flash messages -->
+            {% include "ext/flash_message.html" %}
+            <div class="details">
+                <span><strong>Silver Item Weight:</strong></span>
+                <span>{{ weight }} grams</span>
+            </div>
+            <div class="details">
+                <span><strong>Price(per gm):</strong></span>
+                <span>₹{{ price_per_gram }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Silver Purity:</strong></span>
+                <span>{{ purity }} %</span>
+            </div>
+            <div class="details">
+                <span><strong>Base Price:</strong></span>
+                <span>₹{{ bill['Base Price'] | float }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Service Charge ({{ bill['Service Charge Percentage'] }}%):</strong></span>
+                <span>₹{{ bill['Service Charge'] | float }}</span>
+            </div>
+            <div class="details">
+                <span><strong>Tax ({{ bill['Tax Percentage'] }}%):</strong></span>
+                <span>₹{{ bill['Tax'] | float }}</span>
+            </div>
+            <div class="details total">
+                <span><strong>Total Amount Payable:</strong></span>
+                <span>₹{{ bill['Final Price'] | float }}</span>
+            </div>
+            <p class="text-center mt-4">Final amount rounded to nearest integer</p>
+            <p class="text-center mt-4">Thank you for your purchase!</p>
+            <div class="text-center">
+                <a href="{{ url_for('silver_calculator.silver_calculator') }}" class="btn btn-custom mt-3">Calculate Again</a>
+                <a href="{{ url_for('gold_calculator.gold_calculator') }}" class="btn btn-custom mt-3">Gold Calculator</a>
+                <button onclick="window.print()" class="btn btn-primary mt-3">Print PDF</button>
+            </div>
+        </div>
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> This is not an official bill. It is just an illustration to show the pricing. Partial display of this webpage is not allowed.</p>
+        </div>
+    </div>
+    <!-- Sidebar -->
+    {% if settings.is_gold_jewellers_sidebar %}
+        {% include 'ext/sidebar_jweller.html' %}
+    {% endif %}
+</div>
+{% endblock %}

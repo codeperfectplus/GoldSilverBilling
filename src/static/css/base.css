@@ -1,0 +1,85 @@
+body {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-top: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+footer {
+    background-color: #343a40;
+    color: #adb5bd;
+    padding: 1rem 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ced4da;
+    text-decoration: underline;
+}
+
+/* Flash message container */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Success messages */
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* Error messages */
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Warning messages */
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Info messages */
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Close button for dismissible alerts */
+.alert .close {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    opacity: 0.5;
+    text-shadow: none;
+    filter: alpha(opacity=50);
+    float: right;
+}
+
+.alert .close:hover, .alert .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.75;
+}

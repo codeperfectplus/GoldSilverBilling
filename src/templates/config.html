@@ -1,0 +1,86 @@
+{% extends 'base/base.html' %}
+{% block title %}Jeweller Details{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Jeweller Details</h1>
+
+    <!-- Display flash messages -->
+    {% include "ext/flash_message.html" %}
+
+    <form method="POST" action="{{ url_for('admin.update_jeweller_details') }}" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_name">Jeweller Name</label>
+                    <input type="text" name="jeweller_name" id="jeweller_name" class="form-control" value="{{ jeweller.jeweller_name }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_address">Jeweller Address</label>
+                    <input type="text" name="jeweller_address" id="jeweller_address" class="form-control" value="{{ jeweller.jeweller_address }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_contact">Jeweller Contact</label>
+                    <input type="text" name="jeweller_contact" id="jeweller_contact" class="form-control" value="{{ jeweller.jeweller_contact }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_email">Jeweller Email</label>
+                    <input type="email" name="jeweller_email" id="jeweller_email" class="form-control" value="{{ jeweller.jeweller_email }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_website">Jeweller Website</label>
+                    <input type="url" name="jeweller_website" id="jeweller_website" class="form-control" value="{{ jeweller.jeweller_website }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_gstin">Jeweller GSTIN</label>
+                    <input type="text" name="jeweller_gstin" id="jeweller_gstin" class="form-control" value="{{ jeweller.jeweller_gstin }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="gold_price_per_gram">Gold Price Per Gram</label>
+                    <input type="number" name="gold_price_per_gram" id="gold_price_per_gram" class="form-control" value="{{ jeweller.gold_price_per_gram }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jeweller_logo">Jeweller Logo</label>
+                    <input type="file" name="jeweller_logo" id="jeweller_logo" class="form-control-file">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Update Details</button>
+    </form>
+</div>
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var notification = document.getElementById("notification");
+        if (notification) {
+            setTimeout(function() {
+                notification.style.display = 'none';
+            }, 5000);  // Hide after 5 seconds
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
