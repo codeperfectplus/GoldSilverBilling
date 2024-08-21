@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -17,4 +17,14 @@ Session(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth.login'
+
+# 404 error handler
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+# 500 error handler
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500

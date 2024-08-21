@@ -15,7 +15,7 @@ def silver_calculator():
     system_settings = Settings.query.first()
     jeweller_details = JewellerDetails.query.first()
     if not system_settings.is_silver_calculator_enabled:
-        return redirect(url_for('permission_denied'))
+        return redirect(url_for('additional.permission_denied'))
     if request.method == 'POST':
         try:
             weight = float(request.form['weight'])

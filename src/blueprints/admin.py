@@ -17,7 +17,7 @@ admin_bp = Blueprint('admin', __name__)
 def manage_users():
     system_settings = Settings.query.first()
     if current_user.user_level != 'admin':
-        return redirect(url_for('permission_denied'))
+        return redirect(url_for('additional.permission_denied'))
 
     users = User.query.all()
 
@@ -173,7 +173,7 @@ def dashboard():
 @login_required
 def history():
     if current_user.user_level != 'admin':
-        return redirect(url_for('permission_denied'))
+        return redirect(url_for('additional.permission_denied'))
     selected_type = request.args.get('type', 'all')
 
     if selected_type == 'gold':
@@ -260,6 +260,8 @@ def download_transactions_history():
 @login_required
 def update_jeweller_details():
     system_settings = Settings.query.first()
+    if current_user.user_level != 'admin':
+        return redirect(url_for('additional.permission_denied'))
     if request.method == 'POST':
         jeweller = JewellerDetails.query.first()
 

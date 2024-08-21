@@ -18,10 +18,3 @@ def about() -> str:
 @additional_bp.route('/permission-denied')
 def permission_denied():
     return render_template('permission_denied.html')
-
-@additional_bp.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-
-
