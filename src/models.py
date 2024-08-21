@@ -1,8 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 from src.config import db, app
-
 
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,7 +12,7 @@ class GoldTransaction(db.Model):
     tax = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     total = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     currency = db.Column(db.String(3), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class SilverTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +23,7 @@ class SilverTransaction(db.Model):
     tax = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     total = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     currency = db.Column(db.String(3), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +32,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    last_password_change = db.Column(db.DateTime, default=datetime.utcnow)
+    last_password_change = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     user_level = db.Column(db.String(20), nullable=False, default='customer')
     password_changed = db.Column(db.Boolean, default=False)
 
@@ -56,7 +55,7 @@ class AuditLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     username = db.Column(db.String(50), nullable=False)
     action = db.Column(db.String(255), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     details = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
@@ -73,83 +72,72 @@ class JewellerDetails(db.Model):
     gold_price_per_gram = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     jeweller_logo = db.Column(db.String(255), nullable=True)
 
-    def __init__(self, jeweller_name, jeweller_address, jeweller_contact, jeweller_email, jeweller_website, jeweller_gstin, gold_price_per_gram, jeweller_logo):
-        self.jeweller_name = jeweller_name
-        self.jeweller_address = jeweller_address
-        self.jeweller_contact = jeweller_contact
-        self.jeweller_email = jeweller_email
-        self.jeweller_website = jeweller_website
-        self.jeweller_gstin = jeweller_gstin
-        self.gold_price_per_gram = gold_price_per_gram
-        self.jeweller_logo = jeweller_logo
+def initialize_database():
+    with app.app_context():
+        # Create tables
+        db.create_all()
 
-
-# Database Initialization
-with app.app_context():
-    db.create_all()
-
-# Initial Settings Commit
-with app.app_context():
-    if not Settings.query.first():
-        default_settings = Settings(
-            currency='INR', 
-            theme='light', 
-            language='en',
-            is_flash_message_enabled=True,
-            flash_message_timeout=5,
-            is_gold_jewellers_sidebar=True,
-            is_gold_calculator_enabled=True, 
-            is_silver_calculator_enabled=True
-        )
-        db.session.add(default_settings)
-        db.session.commit()
-
-# Initial JewellerDetails Commit
-with app.app_context():
-    if not JewellerDetails.query.first():
-        default_jeweller_details = JewellerDetails(
-            jeweller_name='GoldSilverBilling',
-            jeweller_address='123, Main Street, City, Country',
-            jeweller_contact='1234567890',
-            jeweller_email='info@goldsilverbilling.com',
-            jeweller_website='https://goldsilverbilling.com',
-            jeweller_gstin='ABC1234567890',
-            gold_price_per_gram=5000.00,
-            jeweller_logo='images/logo.png'
-        )
-        db.session.add(default_jeweller_details)
-        db.session.commit()
-
-# Initial Admin User Creation
-with app.app_context():
-    admin_data = {
-        'fname': 'Admin',
-        'lname': 'User',
-        'username': 'admin',
-        'email': 'admin@gmail.com',
-        'password': generate_password_hash('admin'),
-        'user_level': 'admin',
-        'last_password_change': datetime.utcnow()
-    }
-    customer_data = {
-        'fname': 'Customer',
-        'lname': 'User',
-        'username': 'customer',
-        'email': 'customer@gmail.com',
-        'password': generate_password_hash('customer'),
-        'user_level': 'customer',
-        'last_password_change': datetime.utcnow()
-    }
-
-    for user_data in [admin_data, customer_data]:
-        if not User.query.filter_by(username=user_data['username']).first():
-            user = User(**user_data)
-            db.session.add(user)
+        # Initialize settings if not exists
+        if not Settings.query.first():
+            default_settings = Settings(
+                currency='INR',
+                theme='light',
+                language='en',
+                is_flash_message_enabled=True,
+                flash_message_timeout=5,
+                is_gold_jewellers_sidebar=True,
+                is_gold_calculator_enabled=True,
+                is_silver_calculator_enabled=True
+            )
+            db.session.add(default_settings)
             db.session.commit()
-            print(f"{user_data['username']} user created successfully.")
-        else:
-            print(f"{user_data['username']} user already exists.")
-        
+
+        # Initialize jeweller details if not exists
+        if not JewellerDetails.query.first():
+            default_jeweller_details = JewellerDetails(
+                jeweller_name='GoldSilverBilling',
+                jeweller_address='123, Main Street, City, Country',
+                jeweller_contact='1234567890',
+                jeweller_email='info@goldsilverbilling.com',
+                jeweller_website='https://goldsilverbilling.com',
+                jeweller_gstin='ABC1234567890',
+                gold_price_per_gram=5000.00,
+                jeweller_logo='images/logo.png'
+            )
+            db.session.add(default_jeweller_details)
+            db.session.commit()
+
+        # Initialize users if not exists
+        user_data_list = [
+            {
+                'fname': 'Admin',
+                'lname': 'User',
+                'username': 'admin',
+                'email': 'admin@gmail.com',
+                'password': generate_password_hash('admin'),
+                'user_level': 'admin',
+                'last_password_change': datetime.now(timezone.utc)
+            },
+            {
+                'fname': 'Customer',
+                'lname': 'User',
+                'username': 'customer',
+                'email': 'customer@gmail.com',
+                'password': generate_password_hash('customer'),
+                'user_level': 'customer',
+                'last_password_change': datetime.now(timezone.utc)
+            }
+        ]
+
+        for user_data in user_data_list:
+            if not User.query.filter_by(username=user_data['username']).first():
+                user = User(**user_data)
+                db.session.add(user)
+                db.session.commit()
+                print(f"{user_data['username']} user created successfully.")
+            else:
+                print(f"{user_data['username']} user already exists.")
+
 def log_action(user_id, username, action, details=None):
     if isinstance(details, list):
         details = '<br>'.join(details)

@@ -1,4 +1,5 @@
-from src.config import app, db
+from src.config import app
+from src.models import initialize_database
 
 from src.blueprints import (
     additional_bp,
@@ -11,6 +12,12 @@ from src.blueprints import (
     users_bp
 )
 
+# it is used to initialize the database and settings only once when the app starts
+@app.before_request
+def run_once():
+    if not app.config['INITIALIZED']:
+        initialize_database()
+        app.config['INITIALIZED'] = True
 
 app.register_blueprint(additional_bp)
 app.register_blueprint(admin_bp, url_prefix='/')

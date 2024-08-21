@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import render_template, request, redirect, url_for,  Blueprint, flash
 
 from flask_login import login_user, logout_user, current_user, login_required
@@ -58,7 +58,7 @@ def change_password():
         if user and bcrypt.check_password_hash(user.password, current_password):
             user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
             user.password_changed = True  # Set the flag to True
-            user.last_password_change=datetime.utcnow()
+            user.last_password_change=datetime.now(timezone.utc)
             db.session.commit()
             flash('Password updated successfully!', 'success')
 

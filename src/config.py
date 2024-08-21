@@ -13,6 +13,8 @@ app.secret_key = os.getenv('SECRET_KEY', 'jhd87^&*^udhwduy792ejlndhy783uh')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///production.db' # commit this to git
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['INITIALIZED'] = False
+
 Session(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -24,10 +26,6 @@ login_manager.login_view = 'auth.login'
 def page_not_found(e):
     return render_template('others/404.html'), 404
 
-# 500 error handler
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
 
 # Custom filter to format dates
 @app.template_filter('format_datetime')

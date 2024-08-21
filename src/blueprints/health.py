@@ -9,7 +9,7 @@ def health():
     health_info = {
         "status": "healthy",
         "message": "The server is up and running.",
-        "version": "1.0.0",
+        "version": "2.0.1",
         "timestamp": datetime.now().isoformat()
     }
     return render_template('others/health.html', **health_info)
