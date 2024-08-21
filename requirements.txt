@@ -7,3 +7,5 @@ Flask-Login
 Flask-Bcrypt
 psutil
 flask-admin
+flask-wtf
+email-validator

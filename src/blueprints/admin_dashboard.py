@@ -133,8 +133,14 @@ def dashboard():
 
         if cpu_utilization > 80:
             system_health = "Warning"
-        else:
+        elif cpu_utilization > 60:
+            system_health = "Moderate"
+        elif cpu_utilization > 40:
+            system_health = "Fair"
+        elif cpu_utilization > 20:
             system_health = "Good"
+        else:
+            system_health = "Excellent"
 
         return render_template('dashboard/admin_dashboard.html', 
                             total_users=total_users, 
@@ -145,6 +151,7 @@ def dashboard():
                             audit_logs=audit_logs,
                             settings=system_settings,
                             current_user=current_user)
+    
     elif current_user.user_level == 'customer':
         audit_logs = AuditLog.query.filter_by(user_id=current_user.id)
         return render_template('dashboard/customer_dashboard.html', settings=system_settings)

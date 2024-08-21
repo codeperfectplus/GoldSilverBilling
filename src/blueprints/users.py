@@ -4,7 +4,7 @@ from flask_bcrypt import generate_password_hash
 from flask_login import  login_required, current_user
 
 from src.config import db
-from src.models import User
+from src.models import User, Settings
 
 users_bp = Blueprint('users_', __name__)
 

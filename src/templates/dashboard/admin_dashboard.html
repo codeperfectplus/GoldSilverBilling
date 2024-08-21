@@ -9,9 +9,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="admin-dashboard">
+<div class="admin-dashboard m-4">
     <h2 class="dashboard-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
-    <p class="welcome-message">Welcome, {{ current_user.username }}!</p>
+    <p class="welcome-message">Welcome, {{ current_user.fname }}!</p>
     <!-- Display flash messages -->
     {% include "ext/flash_message.html" %}
     
@@ -54,19 +54,11 @@
         <div class="button-grid">
             <a href="{{ url_for('users_.manage_users') }}" class="btn btn-large"><i class="fas fa-user-cog"></i> User Management</a>
             <a href="{{ url_for('admin_.history') }}" class="btn btn-large"><i class="fas fa-history"></i>Transaction History</a>
-            <a href="{{ url_for('admin_.settings') }}" class="btn btn-large"><i class="fas fa-cog"></i> System Settings</a>
             <a href="{{ url_for('admin_.audit_log') }}" class="btn btn-large"><i class="fas fa-clipboard-list"></i> Audit Logs</a>
-            <a href="{{ url_for('admin_.update_jeweller_details') }}" class="btn btn-large"><i class="fas fa-cog"></i>Jewellers Config Settings</a>
             <a href="{{ url_for('auth.change_password') }}" class="btn btn-large"><i class="fas fa-key"></i> Change Password</a>
+            <a href="{{ url_for('admin_.update_jeweller_details') }}" class="btn btn-large"><i class="fas fa-cog"></i>Jewellers Config Settings</a>
+            <a href="{{ url_for('admin_.settings') }}" class="btn btn-large"><i class="fas fa-cog"></i> System Settings</a>            
         </div>
-    </div>
-    <div class="admin-dashboard">
-        <h3><i class="fas fa-history"></i> Recent Activity</h3>
-        {% for log in audit_logs %}
-        <p>{{ log.timestamp }} - {{ log.action }}</p>
-        <p> {{ log.details }}</p>
-        <hr>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}
