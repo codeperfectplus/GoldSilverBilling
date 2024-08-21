@@ -11,7 +11,7 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
-from calcualtors import GoldCalculator, SilverCalculator
+from calculators import GoldCalculator, SilverCalculator
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -123,8 +123,9 @@ with app.app_context():
 with app.app_context():
     db.create_all()
     settings = Settings(currency='INR', theme='light', language='en',
-                        is_gold_jewellers_sidebar=False,
-                        is_gold_calculator_enabled=False, is_silver_calculator_enabled=False)
+                        is_gold_jewellers_sidebar=True,
+                        is_gold_calculator_enabled=True, 
+                        is_silver_calculator_enabled=True)
     db.session.add(settings)
     db.session.commit()
 
@@ -150,10 +151,9 @@ def page_not_found(e):
 # Home route
 @app.route('/')
 def home() -> str:
-    is_gold_calculator_enabled = Settings.query.first().is_gold_calculator_enabled
-    is_silver_calculator_enabled = Settings.query.first().is_silver_calculator_enabled
-    return render_template('homepage.html', is_gold_calculator_enabled=is_gold_calculator_enabled, 
-                           is_silver_calculator_enabled=is_silver_calculator_enabled)
+    system_settings = Settings.query.first()
+    return render_template('homepage.html', is_gold_calculator_enabled=system_settings.is_gold_calculator_enabled,
+                           is_silver_calculator_enabled=system_settings.is_silver_calculator_enabled)
 
 @app.context_processor
 def inject_theme():
@@ -163,11 +163,8 @@ def inject_theme():
 # Gold calculator route
 @app.route('/gold-calculator', methods=['GET', 'POST'])
 def gold_calculator():
-    current_currency = Settings.query.first().currency
-    is_gold_jewellers_sidebar = Settings.query.first().is_gold_jewellers_sidebar
-    currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
-    is_gold_calculator_enabled = Settings.query.first().is_gold_calculator_enabled
-    if not is_gold_calculator_enabled:
+    system_settings = Settings.query.first()
+    if not system_settings.is_gold_calculator_enabled:
         return redirect(url_for('permission_denied'))
     if request.method == 'POST':
         try:
@@ -194,7 +191,7 @@ def gold_calculator():
                 service_charge=gold_service_charge,
                 tax=gold_tax,
                 total=bill_details['Final Price'],
-                currency=current_currency,
+                currency=system_settings.currency,
             )
             db.session.add(transaction)
             db.session.commit()
@@ -210,9 +207,9 @@ def gold_calculator():
                                    price_per_gram=gold_price_per_gram,
                                    purity=purity,
                                    config=app.config,
-                                   current_currency=current_currency,
-                                   currency_symbol=currency_symbol,
-                                   is_gold_jewellers_sidebar=is_gold_jewellers_sidebar)
+                                   current_currency=system_settings.currency,
+                                   currency_symbol=system_settings.currency_symbol,
+                                   is_gold_jewellers_sidebar=system_settings.is_gold_jewellers_sidebar)
         except ValueError as e:
             logging.error(f"ValueError in gold calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -228,18 +225,16 @@ def gold_calculator():
                            service_charge=gold_service_charge,
                            tax=gold_tax,
                            config=app.config,
-                           current_currency=current_currency,
-                           currency_symbol=currency_symbol,
-                           is_gold_jewellers_sidebar=is_gold_jewellers_sidebar)
+                           current_currency=system_settings.currency,
+                           currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'),
+                           is_gold_jewellers_sidebar=system_settings.is_gold_jewellers_sidebar)
                            
 
 # Silver calculator route
 @app.route('/silver-calculator', methods=['GET', 'POST'])
 def silver_calculator():
-    current_currency = Settings.query.first().currency
-    currency_symbol = currency_to_symbol_dict.get(current_currency, '$')
-    is_silver_calculator_enabled = Settings.query.first().is_silver_calculator_enabled
-    if not is_silver_calculator_enabled:
+    system_settings = Settings.query.first()
+    if not system_settings.is_silver_calculator_enabled:
         return redirect(url_for('permission_denied'))
     if request.method == 'POST':
         try:
@@ -282,8 +277,8 @@ def silver_calculator():
                                    price_per_gram=silver_price_per_gram,
                                    purity=silver_purity,
                                    config=app.config,
-                                   current_currency=current_currency,
-                                   currency_symbol=currency_symbol)
+                                   current_currency=system_settings.currency,
+                                   currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'))
         except ValueError as e:
             logging.error(f"ValueError in silver calculator: {str(e)}")
             flash(f"Input error: {str(e)}", 'error')
@@ -299,8 +294,8 @@ def silver_calculator():
                            service_charge=silver_service_charge,
                            tax=silver_tax,
                            config=app.config,
-                           current_currency=current_currency,
-                           currency_symbol=currency_symbol)
+                           current_currency=system_settings.currency,
+                           currency_symbol=currency_to_symbol_dict.get(system_settings.currency, '$'))
 
 @app.route('/history', methods=['GET'])
 @login_required
