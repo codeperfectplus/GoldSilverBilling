@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>Login Page</h2>
+<p>Please enter your username and password to login.</p>
 <!-- Display flash messages -->
 {% include "ext/flash_message.html" %}
 <form method="POST">
     <label for="username">Username:</label>
-    <input type="username" id="username" name="username" value="admin" required>
+    <input type="text" id="username" name="username" value="admin" required>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" value="admin" required>

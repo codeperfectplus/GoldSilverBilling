@@ -5,25 +5,8 @@ body {
     padding: 0;
 }
 
-nav {
-    background-color: #007bff;
-    padding: 10px;
-    text-align: center;
-}
-
-nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
 .container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 30px;
     background-color: white;
@@ -31,26 +14,22 @@ nav a:hover {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-    text-align: center;
+h1 {
     color: #007bff;
-    font-size: 24px;
+    font-size: 28px;
     margin-bottom: 20px;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
+.form-group {
+    margin-bottom: 20px;
 }
 
 label {
-    margin-bottom: 5px;
     font-weight: bold;
     color: #495057;
 }
 
 input, select {
-    margin-bottom: 15px;
     padding: 12px;
     border-radius: 5px;
     border: 1px solid #ced4da;
@@ -58,13 +37,13 @@ input, select {
 }
 
 input:focus, select:focus {
-    border-color: #80bdff;
+    border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 button {
-    padding: 12px;
+    padding: 12px 20px;
     background-color: #007bff;
     color: white;
     border: none;

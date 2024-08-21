@@ -1,9 +1,44 @@
-/* admin_dashboard.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+a.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+a.btn-primary:hover {
+    background-color: #0056b3;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 18px;
+    font-size: 16px;
     text-align: left;
 }
 
@@ -14,20 +49,24 @@ th, td {
 
 th {
     background-color: #f2f2f2;
-}
-
-select {
-    padding: 5px;
+    color: #007bff;
 }
 
 button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
+    padding: 8px 12px;
+    background-color: #007bff;
     color: white;
     border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+}
+
+form {
+    display: inline;
 }

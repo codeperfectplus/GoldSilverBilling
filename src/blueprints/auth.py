@@ -68,7 +68,7 @@ def change_password():
 
     # if current user password_changed false, flash a message
     if not current_user.password_changed:
-        flash('You need to change your password first to continue.', 'warning')
+        flash('Password needs to be changed first time login', 'danger')
         return render_template('admin/change_password.html', settings=system_settings)
 
     return render_template('admin/change_password.html', settings=system_settings)

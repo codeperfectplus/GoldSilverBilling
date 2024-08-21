@@ -20,6 +20,8 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
+login_manager.login_message_category = 'info'
+login_manager.login_message = 'Please log in to access this page.'
 
 # 404 error handler
 @app.errorhandler(404)
