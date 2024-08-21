@@ -13,7 +13,8 @@
 
     <form method="POST" action="{{ url_for('admin.settings') }}">
         <div class="row">
-            <div class="col-md-6">
+            <!-- Currency -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="currency">Currency</label>
                     <select name="currency" id="currency" class="form-control">
@@ -26,22 +27,25 @@
                     </select>
                 </div>
             </div>
-            <!-- Theme of the website -->
-            <div class="col-md-6">
+
+            <!-- Theme -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="theme">Theme</label>
-                    <select id="theme" name="theme" class="form-control">
+                    <select id="theme" name="theme" class="form-control" disabled>
                         <option value="light" {% if settings and settings.theme == 'light' %}selected{% endif %}>Light</option>
                         <option value="dark" {% if settings and settings.theme == 'dark' %}selected{% endif %}>Dark</option>
                     </select>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-6">
+            <!-- Language -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="language">Language</label>
-                    <select id="language" name="language" class="form-control">
+                    <select id="language" name="language" class="form-control" disabled>
                         <option value="en" {% if settings and settings.language == 'en' %}selected{% endif %}>English</option>
                         <option value="es" {% if settings and settings.language == 'es' %}selected{% endif %}>Spanish</option>
                         <option value="fr" {% if settings and settings.language == 'fr' %}selected{% endif %}>French</option>
@@ -51,58 +55,68 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
+
+            <!-- Sidebar Info -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="is_gold_jewellers_sidebar">Sidebar Info</label>
                     <select id="is_gold_jewellers_sidebar" name="is_gold_jewellers_sidebar" class="form-control">
-                        <option value="1" {% if settings and settings.is_gold_jewellers_sidebar == 1 %}selected{% endif %}>Yes</option>
-                        <option value="0" {% if settings and settings.is_gold_jewellers_sidebar == 0 %}selected{% endif %}>No</option>
+                        <option value="True" {% if settings and settings.is_gold_jewellers_sidebar == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="False" {% if settings and settings.is_gold_jewellers_sidebar == 0 %}selected{% endif %}>Disabled</option>
                     </select>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-6">
+            <!-- Gold Calculator -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="is_gold_calculator_enabled">Gold Calculator</label>
                     <select id="is_gold_calculator_enabled" name="is_gold_calculator_enabled" class="form-control">
-                        <option value="1" {% if settings and settings.is_gold_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
-                        <option value="0" {% if settings and settings.is_gold_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
+                        <option value="True" {% if settings and settings.is_gold_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="False" {% if settings and settings.is_gold_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
+
+            <!-- Silver Calculator -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="is_silver_calculator_enabled">Silver Calculator</label>
                     <select id="is_silver_calculator_enabled" name="is_silver_calculator_enabled" class="form-control">
-                        <option value="1" {% if settings and settings.is_silver_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
-                        <option value="0" {% if settings and settings.is_silver_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
+                        <option value="True" {% if settings and settings.is_silver_calculator_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="False" {% if settings and settings.is_silver_calculator_enabled == 0 %}selected{% endif %}>Disabled</option>
                     </select>
                 </div>
             </div>
-            <!-- Flash message flag -->
-            <!-- is_flash_message_enabled = db.Column(db.Boolean, default=False)
-            flash_message_timeout = db.Column(db.Integer, nullable=False, default=5)
-             -->
-            <div class="col-md-6">
+        </div>
+
+        <div class="row">
+            <!-- Flash Message -->
+            <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="is_flash_message_enabled">Flash Message</label>
                     <select id="is_flash_message_enabled" name="is_flash_message_enabled" class="form-control">
-                        <option value="1" {% if settings and settings.is_flash_message_enabled == 1 %}selected{% endif %}>Enabled</option>
-                        <option value="0" {% if settings and settings.is_flash_message_enabled == 0 %}selected{% endif %}>Disabled</option>
+                        <option value="True" {% if settings and settings.is_flash_message_enabled == 1 %}selected{% endif %}>Enabled</option>
+                        <option value="False" {% if settings and settings.is_flash_message_enabled == 0 %}selected{% endif %}>Disabled</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Flash Message Timeout -->
             {% if settings and settings.is_flash_message_enabled %}
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="flash_message_timeout">Flash Message Timeout (seconds)</label>
-                        <input type="number" id="flash_message_timeout" name="flash_message_timeout" class="form-control" value="{{ settings.flash_message_timeout if settings else '' }}">
-                    </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="form-group">
+                    <label for="flash_message_timeout">Flash Message Timeout (seconds)</label>
+                    <input type="number" id="flash_message_timeout" name="flash_message_timeout" class="form-control" value="{{ settings.flash_message_timeout if settings else '' }}">
                 </div>
+            </div>
             {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
+
+        <button type="submit" class="btn btn-primary btn-lg mt-3">Save Settings</button>
     </form>
 </div>
+
 {% endblock %}

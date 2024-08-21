@@ -149,6 +149,10 @@ with app.app_context():
 
 # Audit Logging Function
 def log_action(user_id, username, action, details=None):
+    if isinstance(details, list):
+        # comma-separated string
+        details = '<br>'.join(details)
+    
     log_entry = AuditLog(
         user_id=user_id, 
         username=username, 

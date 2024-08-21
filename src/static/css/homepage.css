@@ -14,6 +14,7 @@ body {
     border-bottom: 2px solid #e0e0e0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 80px;
+    margin-bottom: 2rem;
 }
 
 .hero h1 {
@@ -29,63 +30,27 @@ body {
     margin-bottom: 2rem;
 }
 
-.hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.btn-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-    color: #ffffff;
-    background: #007bff;
-    border: none;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.btn-hero i {
-    margin-right: 0.75rem;
-    font-size: 1.25rem;
-}
-
-.btn-hero:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-}
-
-.btn-hero:active {
-    background: #004085;
-}
-
 .card-container {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-top: 3rem;
+    justify-content: center;
+    gap: 2rem;
 }
 
 .card {
-    max-width: 320px;
-    padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
+    flex: 1 1 calc(50% - 2rem);
+    max-width: 45%;
+    padding: 2rem;
     background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.card-icon {
+    margin-bottom: 1rem;
+    color: #007bff;
 }
 
 .card h2 {
@@ -112,17 +77,22 @@ body {
     background-color: #0056b3;
 }
 
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
 @media (max-width: 768px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
     .hero h1 {
         font-size: 2rem;
     }
 
     .hero p {
-        font-size: 1rem;
-    }
-
-    .btn-hero {
-        padding: 0.75rem 1.25rem;
         font-size: 1rem;
     }
 }

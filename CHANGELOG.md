@@ -9,6 +9,10 @@ All significant changes to this project will be documented here. The format foll
 - Improved Transaction History functionality.
 - Jewellers info is configurable now in the admin dashboard.
 - Refactored the code into routes, models and config files.
+- Flash messages are now displayed on the dashboard.
+- Flash messages are configurable in the admin dashboard.
+- Audit Logs are now displayed on the dashboard and can be exported to CSV.
+
 
 ## Version 2.0.0
 

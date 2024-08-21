@@ -7,6 +7,9 @@
 {% block content %}
     <div class="container mt-4">
         <h2>Audit Log</h2>
+        <form method="POST" action="{{ url_for('admin.download_audit_log') }}">
+            <button type="submit">Download as CSV</button>
+        </form>
         <table class="table table-bordered table-striped mt-4">
             <thead>
                 <tr>
@@ -25,7 +28,7 @@
                     <td>{{ log.user_id }}</td>
                     <td>{{ log.username }}</td>
                     <td>{{ log.action }}</td>
-                    <td>{{ log.details }}</td>
+                    <td>{{ log.details | safe }}</td>
                     <td>{{ log.timestamp }}</td>
                 </tr>
                 {% endfor %}

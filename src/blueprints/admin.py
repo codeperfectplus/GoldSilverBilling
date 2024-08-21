@@ -40,22 +40,64 @@ def manage_users():
 def settings():
     if current_user.user_level != 'admin':
         return redirect(url_for('home'))
+    
+    # Convert string 'true'/'false' to boolean True/False
+    logs = []
+
+    def str_to_bool(value):
+        return value.lower() == 'true'
 
     if request.method == 'POST':
-        currency = request.form.get('currency')
-        theme = request.form.get('theme')
-        language = request.form.get('language')
-        is_flash_message_enabled = request.form.get('is_flash_message_enabled')
-        flash_message_timeout = request.form.get('flash_message_timeout')
-        if flash_message_timeout is None:
-            flash_message_timeout = 5
-        is_gold_jewellers_sidebar = request.form.get('is_gold_jewellers_sidebar')
-        is_gold_calculator_enabled = request.form.get('is_gold_calculator_enabled')
-        is_silver_calculator_enabled = request.form.get('is_silver_calculator_enabled')
-
-        # Save the settings (you might save them to a database or a config file)
-        # Assuming you have a Settings model or similar logic to save settings
+        currency = request.form.get('currency', 'INR')
+        theme = request.form.get('theme', 'light')
+        language = request.form.get('language', 'en')
+        flash_message_timeout = int(request.form.get('flash_message_timeout', 5))
+        is_flash_message_enabled = str_to_bool(request.form.get('is_flash_message_enabled', 'true'))
+        is_gold_jewellers_sidebar = str_to_bool(request.form.get('is_gold_jewellers_sidebar', 'true'))
+        is_gold_calculator_enabled = str_to_bool(request.form.get('is_gold_calculator_enabled', 'true'))
+        is_silver_calculator_enabled = str_to_bool(request.form.get('is_silver_calculator_enabled', 'true'))
+        
         settings = Settings.query.first()
+        if settings.is_gold_jewellers_sidebar != is_gold_jewellers_sidebar:
+            # log_action(current_user.id, current_user.username, 'System Settings Change', details=f"Sidebar Status Changed from {settings.is_gold_jewellers_sidebar} to {is_gold_jewellers_sidebar}")
+            logs.append(f"Sidebar Status Changed from {settings.is_gold_jewellers_sidebar} to {is_gold_jewellers_sidebar}")
+            settings.is_gold_jewellers_sidebar = is_gold_jewellers_sidebar
+
+        if settings.is_gold_calculator_enabled != is_gold_calculator_enabled:
+            logs.append(f"Gold Calculator Status Changed from {settings.is_gold_calculator_enabled} to {is_gold_calculator_enabled}")
+            settings.is_gold_calculator_enabled = is_gold_calculator_enabled
+
+        if settings.is_silver_calculator_enabled != is_silver_calculator_enabled:
+            logs.append(f"Silver Calculator Status Changed from {settings.is_silver_calculator_enabled} to {is_silver_calculator_enabled}")
+            settings.is_silver_calculator_enabled = is_silver_calculator_enabled
+
+        if settings.is_flash_message_enabled != is_flash_message_enabled:
+            logs.append(f"Flash Message Status Changed from {settings.is_flash_message_enabled} to {is_flash_message_enabled}")
+            settings.is_flash_message_enabled = is_flash_message_enabled
+
+        if settings.flash_message_timeout != flash_message_timeout:
+            logs.append(f"Flash Message Timeout Changed from {settings.flash_message_timeout} to {flash_message_timeout}")
+            settings.flash_message_timeout = flash_message_timeout        
+
+        if settings.currency != currency:
+            logs.append(f"Currency Changed from {settings.currency} to {currency}")
+            settings.currency = currency
+
+        if settings.theme != theme:
+            logs.append(f"Theme Changed from {settings.theme} to {theme}")
+            settings.theme = theme
+
+        if settings.language != language:
+            logs.append(f"Language Changed from {settings.language} to {language}")
+            settings.language = language
+
+        # if not settings changes add no changed done message, and dont't commit
+        if not logs:
+            flash("No changes made.", 'info')
+            return redirect(url_for('admin.settings'))
+
+        log_action(current_user.id, current_user.username, 'System Settings Change', details=logs)
+        
         if not settings:
             settings = Settings(currency=currency, theme=theme, language=language,
                                 is_flash_message_enabled=is_flash_message_enabled,
@@ -63,20 +105,21 @@ def settings():
                                 is_gold_jewellers_sidebar=is_gold_jewellers_sidebar,
                                 is_gold_calculator_enabled=is_gold_calculator_enabled,
                                 is_silver_calculator_enabled=is_silver_calculator_enabled)
+            
         else:
             settings.currency = currency
             settings.theme = theme
             settings.language = language
-            settings.is_flash_message_enabled = int(request.form.get('is_flash_message_enabled'))
-            settings.flash_message_timeout = int(flash_message_timeout)
-            settings.is_gold_jewellers_sidebar = int(is_gold_jewellers_sidebar)
-            settings.is_gold_calculator_enabled = int(is_gold_calculator_enabled)
-            settings.is_silver_calculator_enabled = int(is_silver_calculator_enabled)
+            settings.is_flash_message_enabled = is_flash_message_enabled 
+            settings.flash_message_timeout = flash_message_timeout
+            settings.is_gold_jewellers_sidebar = is_gold_jewellers_sidebar
+            settings.is_gold_calculator_enabled = is_gold_calculator_enabled
+            settings.is_silver_calculator_enabled = is_silver_calculator_enabled
 
         db.session.add(settings)
         db.session.commit()
-        flash('System settings updated successfully!', 'success')
-        log_action(current_user.id, current_user.username, 'System Settings Change', details=f"Currency set to {currency}, Theme set to {theme}")
+        for log in logs:
+            flash(log, 'success')
         return redirect(url_for('admin.settings'))
     
     settings = Settings.query.first()
@@ -97,6 +140,7 @@ def audit_log():
 @login_required
 def dashboard():
     system_settings = Settings.query.first()
+    audit_logs = AuditLog.query.filter_by(user_id=current_user.id).order_by(AuditLog.timestamp.desc()).all()
     if current_user.user_level == 'admin':
         total_users = User.query.count()  # Count total users
         active_sessions = len(session)  # This is a basic approach. You may want to track sessions differently.
@@ -113,7 +157,6 @@ def dashboard():
         else:
             system_health = "Good"
 
-        audit_logs = AuditLog.query.filter_by(user_id=current_user.id).all()
         return render_template('admin_dashboard.html', 
                             total_users=total_users, 
                             active_sessions=active_sessions, 
@@ -123,7 +166,6 @@ def dashboard():
                             audit_logs=audit_logs,
                             settings=system_settings)
     elif current_user.user_level == 'customer':
-        audit_logs = AuditLog.query.filter_by(user_id=current_user.id).all()
         return render_template('customer_dashboard.html', audit_logs=audit_logs)
  
 # Silver calculator route
@@ -157,6 +199,21 @@ def history():
                           'timestamp': t.timestamp} for t in silver_transactions]
 
     return render_template('history.html', transactions=transactions, selected_type=selected_type)
+
+@admin_bp.route('/download_audit_log', methods=['POST'])
+def download_audit_log():
+    logs = AuditLog.query.all()
+    si = StringIO()
+    writer = csv.writer(si)
+
+    header = ['ID', 'User ID', 'Action', 'description', 'Timestamp']
+    writer.writerow(header)
+
+    for log in logs:
+        writer.writerow([log.id, log.user_id, log.action, log.details, log.timestamp])
+
+    output = si.getvalue().encode('utf-8')
+    return send_file(BytesIO(output), as_attachment=True, download_name='audit_log.csv')
 
 @admin_bp.route('/download_transactions_history', methods=['POST'])
 def download_transactions_history():

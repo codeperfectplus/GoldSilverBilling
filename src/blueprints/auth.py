@@ -31,15 +31,17 @@ def register():
 def login():
     system_settings = Settings.query.first()
     if request.method == 'POST':
-        email = request.form.get('email')
+        username = request.form.get('username')
         password = request.form.get('password')
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             log_action(user.id, user.username, 'Login', f'User {user.username} logged in.')
             flash(f'Login successful as {user.username}', 'success')
             return redirect(url_for('admin.dashboard'))
-    return render_template('login.html')
+        else:
+            flash('Login failed. Please check your credentials.', 'danger')
+    return render_template('login.html', settings=system_settings)
 
 @auth_bp.route("/logout")
 def logout():

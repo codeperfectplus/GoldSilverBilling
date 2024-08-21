@@ -8,23 +8,35 @@
 <div class="hero">
     <h1>Welcome to the Pricing Calculator</h1>
     <p>Select a calculator to get started.</p>
-    <div class="hero-buttons">
+    <div class="card-container">
         {% if is_gold_calculator_enabled %}
-            <a href="{{ url_for('gold_calculator.gold_calculator') }}" class="btn btn-hero">
-                <i class="fa-solid fa-coins fa-lg"></i> Gold Calculator
-            </a>
+        <div class="card">
+            <i class="fa-solid fa-coins fa-3x card-icon"></i>
+            <h2>Gold Calculator</h2>
+            <p>Calculate the price of your gold jewelry with ease.</p>
+            <a href="{{ url_for('gold_calculator.gold_calculator') }}" class="btn-custom">Go to Gold Calculator</a>
+        </div>
         {% endif %}
         {% if is_silver_calculator_enabled %}
-        <a href="{{ url_for('silver_calculator.silver_calculator') }}" class="btn btn-hero">
-            <i class="fa-solid fa-gem fa-lg"></i> Silver Calculator
-        </a>
+        <div class="card">
+            <i class="fa-solid fa-gem fa-3x card-icon"></i>
+            <h2>Silver Calculator</h2>
+            <p>Calculate the price of your silver jewelry effortlessly.</p>
+            <a href="{{ url_for('silver_calculator.silver_calculator') }}" class="btn-custom">Go to Silver Calculator</a>
+        </div>
         {% endif %}
-        <a href="{{ url_for('additional.features') }}" class="btn btn-hero">
-            <i class="fa-solid fa-medal fa-lg"></i> Features
-        </a>
-        <a href="{{ url_for('additional.pricing') }}" class="btn btn-hero">
-            <i class="fa-solid fa-money-check-dollar fa-lg"></i> Pricing
-        </a>
+        <div class="card">
+            <i class="fa-solid fa-medal fa-3x card-icon"></i>
+            <h2>Features</h2>
+            <p>Explore the features of our application.</p>
+            <a href="{{ url_for('additional.features') }}" class="btn-custom">Discover Features</a>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-money-check-dollar fa-3x card-icon"></i>
+            <h2>Pricing</h2>
+            <p>Check out our pricing plans and offers.</p>
+            <a href="{{ url_for('additional.pricing') }}" class="btn-custom">View Pricing</a>
+        </div>
     </div>
 </div>
 {% endblock %}
