@@ -33,7 +33,9 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    last_password_change = db.Column(db.DateTime, default=datetime.utcnow)
     user_level = db.Column(db.String(10), nullable=False, default='customer')
+    password_changed = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.user_level}')"
@@ -126,7 +128,8 @@ with app.app_context():
             username='admin',
             email='admin@gmail.com',
             password=generate_password_hash('admin'),
-            user_level='admin'
+            user_level='admin',
+            last_password_change=datetime.utcnow()
         )
         db.session.add(admin_user)
         db.session.commit()

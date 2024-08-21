@@ -2,12 +2,13 @@
 import logging 
 
 from flask import render_template, request, session, redirect, url_for, flash, Blueprint
-from flask_login import current_user
+from flask_login import current_user, login_required, login_remembered
 from src.calculators import GoldCalculator
 
 from src.config import db
 from src.models import Settings, GoldTransaction, JewellerDetails, log_action
 from src.blueprints.helper import get_currency_symbol
+from src.blueprints.decorators import require_password_change
 
 gold_calculator_bp = Blueprint('gold_calculator', __name__)
 
@@ -16,6 +17,7 @@ gold_calculator_bp = Blueprint('gold_calculator', __name__)
 def gold_calculator():
     system_settings = Settings.query.first()
     jeweller_details = JewellerDetails.query.first()
+
     if not system_settings.is_gold_calculator_enabled:
         return redirect(url_for('additional.permission_denied'))
     if request.method == 'POST':

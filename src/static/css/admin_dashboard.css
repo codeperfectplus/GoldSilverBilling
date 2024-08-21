@@ -31,6 +31,16 @@
     margin-bottom: 30px;
 }
 
+.card p:last-of-type {
+    font-size: 0.9em; /* Reduced font size */
+    color: #666; /* Light grey color for less emphasis */
+}
+
+.card h3 {
+    font-size: 1.3em; /* Adjusted heading size if necessary */
+    margin-bottom: 8px;
+}
+
 .card {
     background-color: #ffffff;
     padding: 20px;
@@ -128,3 +138,5 @@
 .disabled-link:focus {
     outline: none;
 }
+
+

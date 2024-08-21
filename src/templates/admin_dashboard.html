@@ -41,6 +41,12 @@
             <h3>CPU Utilization</h3>
             <p>{{ cpu_util }}</p>
         </div>
+        <!-- last password change -->
+        <div class="card">
+            <i class="fas fa-key card-icon"></i>
+            <h3>Last Password Change</h3>
+            <p>{{ current_user.last_password_change | format_datetime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
     </div>
 
     <div class="admin-tools">
@@ -51,6 +57,7 @@
             <a href="{{ url_for('admin.settings') }}" class="btn btn-large"><i class="fas fa-cog"></i> System Settings</a>
             <a href="{{ url_for('admin.audit_log') }}" class="btn btn-large"><i class="fas fa-clipboard-list"></i> Audit Logs</a>
             <a href="{{ url_for('admin.update_jeweller_details') }}" class="btn btn-large"><i class="fas fa-cog"></i>Jewellers Config Settings</a>
+            <a href="{{ url_for('auth.change_password') }}" class="btn btn-large"><i class="fas fa-key"></i> Change Password</a>
         </div>
     </div>
     <div class="admin-dashboard">

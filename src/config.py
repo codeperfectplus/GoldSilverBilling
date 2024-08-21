@@ -28,3 +28,10 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+# Custom filter to format dates
+@app.template_filter('format_datetime')
+def format_datetime(value, format='%Y-%m-%d %H:%M:%S'):
+    if value is not None:
+        return value.strftime(format)
+    return ''

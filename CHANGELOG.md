@@ -12,6 +12,7 @@ All significant changes to this project will be documented here. The format foll
 - Flash messages are now displayed on the dashboard.
 - Flash messages are configurable in the admin dashboard.
 - Audit Logs are now displayed on the dashboard and can be exported to CSV.
+- Password now can be changed from the dashboard.
 
 
 ## Version 2.0.0

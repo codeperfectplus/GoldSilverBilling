@@ -47,7 +47,7 @@
             <td>{{ transaction.service_charge }}</td>
             <td>{{ transaction.tax }}</td>
             <td>{{ transaction.total }}</td>
-            <td>{{ transaction.timestamp }}</td>
+            <td>{{ transaction.timestamp | format_datetime('%Y-%m-%d %H:%M:%S') }}</td>
         </tr>
         {% endfor %}
     </table>
