@@ -45,7 +45,7 @@
             <button type="submit" class="btn btn-hero btn-block">Generate Estimate Bill</button>
             {% if current_user.is_authenticated %}
                 {% if current_user.user_level == 'admin' %}
-                    <a href="{{ url_for('history') }}" class="btn btn-hero mt-2">Previous History</a>
+                    <a href="{{ url_for('history.history') }}" class="btn btn-hero mt-2">Previous History</a>
                 {% endif %}
             {% endif %}
         </form>

@@ -2,7 +2,7 @@ from datetime import datetime
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 
-from config import db, app
+from src.config import db, app
 
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -87,7 +87,6 @@ class JewellerDetails(db.Model):
 with app.app_context():
     db.create_all()
 
-
 # first commit in database for settings
 with app.app_context():
     if not Settings.query.first():
@@ -129,3 +128,9 @@ with app.app_context():
         print("Admin user created successfully.")
     else:
         print("Admin user already exists.")
+
+
+def log_action(user_id, username, action, details=None):
+    log_entry = AuditLog(user_id=user_id, username=username, action=action, details=details)
+    db.session.add(log_entry)
+    db.session.commit()

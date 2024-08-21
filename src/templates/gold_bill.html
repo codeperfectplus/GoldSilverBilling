@@ -40,8 +40,8 @@
             <p class="text-center mt-4">Final amount rounded to nearest integer</p>
             <p class="text-center mt-4">Thank you for your purchase!</p>
             <div class="text-center">
-                <a href="{{ url_for('gold_calculator') }}" class="btn btn-custom mt-3">Calculate Again</a>
-                <a href="{{ url_for('silver_calculator') }}" class="btn btn-custom mt-3">Silver Calculator</a>
+                <a href="{{ url_for('gold_calculator.gold_calculator') }}" class="btn btn-custom mt-3">Calculate Again</a>
+                <a href="{{ url_for('silver_calculator.silver_calculator') }}" class="btn btn-custom mt-3">Silver Calculator</a>
                 <button onclick="window.print()" class="btn btn-primary mt-3">Print PDF</button>
             </div>
         </div>

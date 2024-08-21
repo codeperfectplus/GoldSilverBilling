@@ -57,7 +57,7 @@ cover/
 
 # Django stuff:
 *.log
-local_settings.py
+local_.py
 db.sqlite3
 db.sqlite3-journal
 
@@ -130,7 +130,7 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# Spyder project 
 .spyderproject
 .spyproject
 
