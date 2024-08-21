@@ -9,6 +9,18 @@
     <div class="main-content">
         <h1>Silver Price Calculator</h1>
         <p class="text-center">Get accurate silver prices with our easy-to-use calculator!</p>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
         <form action="/silver-calculator" method="POST" class="shadow p-4 bg-white rounded">
             <div class="form-group">
                 <label for="weight">Weight (grams): <i class="fa-solid fa-scale-balanced"></i></label>
@@ -24,7 +36,7 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="service_charge">Service Charge (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
+                    <label for="service_charge">Making Charge (%): <i class="fa-solid fa-file-invoice-dollar"></i></label>
                     <input type="number" id="service_charge" name="service_charge" step="0.1" value="{{ service_charge }}" class="form-control">
                 </div>
                 <div class="form-group">
@@ -35,7 +47,7 @@
             <button type="submit" class="btn btn-hero btn-block mt-4">Generate Estimate Bill</button>
             {% if current_user.is_authenticated %}
                 {% if current_user.user_level == 'admin' %}
-                    <a href="{{ url_for('history.history') }}" class="btn btn-hero mt-2">Previous History</a>
+                    <a href="{{ url_for('admin.history') }}" class="btn btn-hero mt-2">Previous History</a>
                 {% endif %}
             {% endif %}
         </form>

@@ -1,9 +1,9 @@
 from datetime import datetime
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
-
 from src.config import db, app
 
+# Models
 class GoldTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     weight = db.Column(db.Float, nullable=False)
@@ -14,7 +14,6 @@ class GoldTransaction(db.Model):
     total = db.Column(db.Float, nullable=False)
     currency = db.Column(db.String(3), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
 
 class SilverTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +26,6 @@ class SilverTransaction(db.Model):
     currency = db.Column(db.String(3), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(20), nullable=False)
@@ -39,7 +37,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.user_level}')"
-
 
 class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,7 +59,6 @@ class AuditLog(db.Model):
         return f"AuditLog('{self.user_id}', '{self.action}', '{self.timestamp}')"
 
 class JewellerDetails(db.Model):
-    __tablename__ = 'jeweller_details'
     id = db.Column(db.Integer, primary_key=True)
     jeweller_name = db.Column(db.String(100), nullable=False)
     jeweller_address = db.Column(db.String(255), nullable=False)
@@ -83,24 +79,28 @@ class JewellerDetails(db.Model):
         self.gold_price_per_gram = gold_price_per_gram
         self.jeweller_logo = jeweller_logo
 
-# Create the database
+# Database Initialization
 with app.app_context():
     db.create_all()
 
-# first commit in database for settings
+# Initial Settings Commit
 with app.app_context():
     if not Settings.query.first():
-        settings = Settings(currency='INR', theme='light', language='en',
-                            is_gold_jewellers_sidebar=True,
-                            is_gold_calculator_enabled=True, 
-                            is_silver_calculator_enabled=True)
-        db.session.add(settings)
+        default_settings = Settings(
+            currency='INR', 
+            theme='light', 
+            language='en',
+            is_gold_jewellers_sidebar=True,
+            is_gold_calculator_enabled=True, 
+            is_silver_calculator_enabled=True
+        )
+        db.session.add(default_settings)
         db.session.commit()
 
-# initial commit in database for jeweller_details
+# Initial JewellerDetails Commit
 with app.app_context():
     if not JewellerDetails.query.first():
-        jeweller_details = JewellerDetails(
+        default_jeweller_details = JewellerDetails(
             jeweller_name='GoldSilverBilling',
             jeweller_address='123, Main Street, City, Country',
             jeweller_contact='1234567890',
@@ -108,11 +108,12 @@ with app.app_context():
             jeweller_website='https://goldsilverbilling.com',
             jeweller_gstin='ABC1234567890',
             gold_price_per_gram=5000.00,
-            jeweller_logo='images/logo.png')
-        db.session.add(jeweller_details)
+            jeweller_logo='images/logo.png'
+        )
+        db.session.add(default_jeweller_details)
         db.session.commit()
 
-# create a initial admin user
+# Initial Admin User Creation
 with app.app_context():
     if not User.query.filter_by(username='admin').first():
         admin_user = User(
@@ -129,8 +130,13 @@ with app.app_context():
     else:
         print("Admin user already exists.")
 
-
+# Audit Logging Function
 def log_action(user_id, username, action, details=None):
-    log_entry = AuditLog(user_id=user_id, username=username, action=action, details=details)
+    log_entry = AuditLog(
+        user_id=user_id, 
+        username=username, 
+        action=action, 
+        details=details
+    )
     db.session.add(log_entry)
     db.session.commit()

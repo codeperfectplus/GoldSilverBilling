@@ -1,6 +1,6 @@
 # Gold Silver Billing
 
-![Homepage](/images/app.png)
+![Homepage](/screenshots/app.png)
 
 ## Mission
 
@@ -50,23 +50,23 @@ Here are some screenshots of the application:
 
 ### Homepage
 
-![Homepage](/images/homepage.png)
+![Homepage](/screenshots/homepage.png)
 
 ### Admin Dashboard
 
-![Admin Dashboard](/images/admin_dashboard.png)
+![Admin Dashboard](/screenshots/admin_dashboard.png)
 
 ### Gold Calculator
 
-![Gold Calculator](/images/gold_calculator.png)
+![Gold Calculator](/screenshots/gold_calculator.png)
 
 ### System Settings
 
-![System Settings](/images/system_setting.png)
+![System Settings](/screenshots/system_setting.png)
 
 ### Transaction History
 
-![Transaction History](/images/transaction_history.png)
+![Transaction History](/screenshots/transaction_history.png)
 
 ## Planned Improvements
 

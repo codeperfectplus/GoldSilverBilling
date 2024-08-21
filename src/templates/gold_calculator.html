@@ -10,6 +10,19 @@
     <div class="main-content">
         <h1>Gold Price Calculator</h1>
         <p class="text-center">Get accurate gold price estimates quickly and easily.</p>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        
         <form action="/gold-calculator" method="POST" class="form-card shadow p-4 bg-white rounded">
             
             <div class="form-group">
@@ -45,7 +58,7 @@
             <button type="submit" class="btn btn-hero btn-block">Generate Estimate Bill</button>
             {% if current_user.is_authenticated %}
                 {% if current_user.user_level == 'admin' %}
-                    <a href="{{ url_for('history.history') }}" class="btn btn-hero mt-2">Previous History</a>
+                    <a href="{{ url_for('admin.history') }}" class="btn btn-hero mt-2">Previous History</a>
                 {% endif %}
             {% endif %}
         </form>

@@ -8,6 +8,7 @@ All significant changes to this project will be documented here. The format foll
 - Enhanced the user interface.
 - Improved Transaction History functionality.
 - Jewellers info is configurable now in the admin dashboard.
+- Refactored the code into routes, models and config files.
 
 ## Version 2.0.0
 

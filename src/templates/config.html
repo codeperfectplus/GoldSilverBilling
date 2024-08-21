@@ -6,7 +6,19 @@
 {% block content %}
 <div class="container">
     <h1>Jeweller Details</h1>
-    <form method="POST" action="{{ url_for('config.update_jeweller_details') }}" enctype="multipart/form-data">
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin.update_jeweller_details') }}" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -66,4 +78,17 @@
         <button type="submit" class="btn btn-primary mt-3">Update Details</button>
     </form>
 </div>
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var notification = document.getElementById("notification");
+        if (notification) {
+            setTimeout(function() {
+                notification.style.display = 'none';
+            }, 5000);  // Hide after 5 seconds
+        }
+    });
+</script>
+{% endblock %}
 {% endblock %}

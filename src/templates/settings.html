@@ -4,8 +4,21 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
 {% endblock %}
 {% block content %}
+
 <div class="container">
     <h1>System Settings</h1>
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <form method="POST" action="{{ url_for('admin.settings') }}">
         <div class="row">
             <div class="col-md-6">

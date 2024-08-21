@@ -2,7 +2,7 @@
 import logging 
 
 from flask import render_template, request, session, redirect, url_for, flash, Blueprint
-from calculators import SilverCalculator
+from src.calculators import SilverCalculator
 
 from src.config import db
 from src.models import Settings, SilverTransaction, JewellerDetails
@@ -28,6 +28,18 @@ def silver_calculator():
             session['silver_price_per_gram'] = silver_price_per_gram
             session['silver_service_charge'] = silver_service_charge
             session['silver_tax'] = silver_tax
+
+            if silver_price_per_gram <= 0:
+                flash('Invalid price per gram. Please enter a valid price.', 'danger')
+                return redirect(url_for('silver_calculator.silver_calculator'))
+            
+            if weight <= 0:
+                flash('Invalid weight. Please enter a valid weight.', 'danger')
+                return redirect(url_for('silver_calculator.silver_calculator'))
+            
+            if silver_purity <= 0:
+                flash('Invalid purity. Please enter a valid purity.', 'danger')
+                return redirect(url_for('silver_calculator.silver_calculator'))
 
             # Calculate silver price
             silver_item = SilverCalculator(
@@ -62,8 +74,8 @@ def silver_calculator():
                                    currency_symbol=get_currency_symbol(system_settings.currency))
         except ValueError as e:
             logging.error(f"ValueError in silver calculator: {str(e)}")
-            flash(f"Input error: {str(e)}", 'error')
-            return redirect(url_for('silver_calculator'))
+            flash(f"Input error: {str(e)}", 'danger')
+            return redirect(url_for('silver_calculator.silver_calculator'))
 
     # Use session-stored price per gram or a default value
     silver_price_per_gram = session.get('silver_price_per_gram', 0)

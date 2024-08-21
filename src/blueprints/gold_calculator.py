@@ -3,7 +3,7 @@ import logging
 
 from flask import render_template, request, session, redirect, url_for, flash, Blueprint
 from flask_login import current_user
-from calculators import GoldCalculator
+from src.calculators import GoldCalculator
 
 from src.config import db
 from src.models import Settings, GoldTransaction, JewellerDetails, log_action
@@ -66,9 +66,9 @@ def gold_calculator():
                                    currency_symbol=get_currency_symbol(system_settings.currency))
         
         except ValueError as e:
+            flash(f"Please enter valid numbers for weight, price per gram, service charge, and tax.", 'danger')
             logging.error(f"ValueError in gold calculator: {str(e)}")
-            flash(f"Input error: {str(e)}", 'error')
-            return redirect(url_for('gold_calculator'))
+            return redirect(url_for('gold_calculator.gold_calculator'))
 
     # Use session-stored price per gram or a default value
     gold_price_per_gram = session.get('gold_price_per_gram', 0)

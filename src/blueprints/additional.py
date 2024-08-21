@@ -15,7 +15,6 @@ def features() -> str:
 def about() -> str:
     return render_template('about.html')
 
-
 @additional_bp.route('/permission-denied')
 def permission_denied():
     return render_template('permission_denied.html')
