@@ -7,6 +7,7 @@ All significant changes to this project will be documented here. The format foll
 - Admin can now enable or disable features such as Gold Item Billing, Silver Item Billing, and the Sidebar.
 - Enhanced the user interface.
 - Improved Transaction History functionality.
+- Jewellers info is configurable now in the admin dashboard.
 
 ## Version 2.0.0
 

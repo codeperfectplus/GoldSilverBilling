@@ -144,32 +144,31 @@ with app.app_context():
 
 # first commit in database for settings
 with app.app_context():
-    db.create_all()
-    settings = Settings(currency='INR', theme='light', language='en',
-                        is_gold_jewellers_sidebar=True,
-                        is_gold_calculator_enabled=True, 
-                        is_silver_calculator_enabled=True)
-    db.session.add(settings)
-    db.session.commit()
+    if not Settings.query.first():
+        settings = Settings(currency='INR', theme='light', language='en',
+                            is_gold_jewellers_sidebar=True,
+                            is_gold_calculator_enabled=True, 
+                            is_silver_calculator_enabled=True)
+        db.session.add(settings)
+        db.session.commit()
 
 # initial commit in database for jeweller_details
 with app.app_context():
-    db.create_all()
-    jeweller_details = JewellerDetails(
-        jeweller_name='GoldSilverBilling',
-        jeweller_address='123, Main Street, City, Country',
-        jeweller_contact='1234567890',
-        jeweller_email='info@goldsilverbilling.com',
-        jeweller_website='https://goldsilverbilling.com',
-        jeweller_gstin='ABC1234567890',
-        gold_price_per_gram=5000.00,
-        jeweller_logo='images/logo.png')
-    db.session.add(jeweller_details)
-    db.session.commit()
+    if not JewellerDetails.query.first():
+        jeweller_details = JewellerDetails(
+            jeweller_name='GoldSilverBilling',
+            jeweller_address='123, Main Street, City, Country',
+            jeweller_contact='1234567890',
+            jeweller_email='info@goldsilverbilling.com',
+            jeweller_website='https://goldsilverbilling.com',
+            jeweller_gstin='ABC1234567890',
+            gold_price_per_gram=5000.00,
+            jeweller_logo='images/logo.png')
+        db.session.add(jeweller_details)
+        db.session.commit()
 
 # create a initial admin user
 with app.app_context():
-    # Check if the admin user already exists
     if not User.query.filter_by(username='admin').first():
         admin_user = User(
             fname='Admin',
