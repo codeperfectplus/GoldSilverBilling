@@ -8,7 +8,7 @@ from flask_login import current_user, login_required
 
 from src.config import db
 from src.models import User, AuditLog, Settings, log_action
-from src.models import GoldTransaction, SilverTransaction, JewellerDetails
+from src.models import GoldTransaction, SilverTransaction, JewellerDetails, Settings
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -259,6 +259,7 @@ def download_transactions_history():
 @admin_bp.route('/config', methods=['GET', 'POST'])
 @login_required
 def update_jeweller_details():
+    system_settings = Settings.query.first()
     if request.method == 'POST':
         jeweller = JewellerDetails.query.first()
 
@@ -282,4 +283,4 @@ def update_jeweller_details():
         return redirect(url_for('admin.update_jeweller_details'))
 
     jeweller = JewellerDetails.query.first()
-    return render_template('config.html', jeweller=jeweller)
+    return render_template('config.html', jeweller=jeweller, settings=system_settings)
