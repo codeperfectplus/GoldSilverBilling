@@ -1,11 +1,9 @@
-requests
 flask
 flask-session
-gunicorn
 flask-sqlalchemy
-Flask-Login
-Flask-Bcrypt
+flask-login
+flask-bcrypt
+gunicorn
 psutil
-flask-admin
-flask-wtf
-email-validator
+requests
+sanatio

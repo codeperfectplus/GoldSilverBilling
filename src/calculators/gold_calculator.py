@@ -1,3 +1,8 @@
+from sanatio import Sanatio
+
+sanatio = Sanatio()
+
+
 class GoldCalculator:
     """
     A class to represent an item for which the gold price is calculated.
@@ -45,7 +50,7 @@ class GoldCalculator:
         Returns:
             float: The tax amount.
         """
-        return round(item_price * self.tax / 100, 2)
+        return sanatio.truncate(item_price * self.tax / 100, 2)
         
     def calculate_service_charge(self, item_price):
         """
@@ -57,7 +62,7 @@ class GoldCalculator:
         Returns:
             float: The service charge amount.
         """
-        return round(item_price * self.service_charge / 100, 2)
+        return sanatio.truncate(item_price * self.service_charge / 100, 2)
 
     def calculate_price(self):
         """
@@ -67,11 +72,11 @@ class GoldCalculator:
             dict: A dictionary with the base price, service charge, service charge percentage,
                   tax, tax percentage, and final price.
         """
-        base_price = round(self.weight * self.price_per_gram, 2)
+        base_price = sanatio.truncate(self.weight * self.price_per_gram, 2)
         service_charge = self.calculate_service_charge(base_price)
         total_price = base_price + service_charge
         tax = self.calculate_tax(total_price)
-        final_price = round(total_price + tax)
+        final_price = sanatio.truncate(total_price + tax)
         
         return {
             "Base Price": base_price,

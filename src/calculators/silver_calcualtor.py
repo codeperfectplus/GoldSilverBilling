@@ -1,3 +1,8 @@
+from sanatio import Sanatio
+
+sanatio = Sanatio()
+
+
 class SilverCalculator:
     """
     A class to represent an item for which the silver price is calculated.
@@ -49,7 +54,7 @@ class SilverCalculator:
         Returns:
             float: The tax amount.
         """
-        return round(item_price * self.tax / 100, 2)
+        return sanatio.truncate(item_price * self.tax / 100, 2)
         
     def calculate_service_charge(self, item_price):
         """
@@ -61,7 +66,7 @@ class SilverCalculator:
         Returns:
             float: The service charge amount.
         """
-        return round(item_price * self.service_charge / 100, 2)
+        return sanatio.truncate(item_price * self.service_charge / 100, 2)
 
     def calculate_base_price(self):
         """
@@ -84,13 +89,13 @@ class SilverCalculator:
         service_charge = self.calculate_service_charge(base_price)
         total_price = base_price + service_charge
         tax = self.calculate_tax(total_price)
-        final_price = round(total_price + tax, 2)
+        final_price = sanatio.truncate(total_price + tax, 2)
         
         return {
-            "Base Price": round(base_price, 2),
-            "Service Charge": round(service_charge, 2),
+            "Base Price": sanatio.truncate(base_price, 2),
+            "Service Charge": sanatio.truncate(service_charge, 2),
             "Service Charge Percentage": self.service_charge,
-            "Tax": round(tax, 2),
+            "Tax": sanatio.truncate(tax, 2),
             "Tax Percentage": self.tax,
             "Final Price": final_price
         }
